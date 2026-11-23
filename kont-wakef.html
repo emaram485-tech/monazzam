@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كنت واقف فين؟ | مُنَظَّمْ</title>
+<meta name="theme-color" content="#4a7c59">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Cairo:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0ede8;
+  --surface: #faf8f5;
+  --surface2: #f5f2ed;
+  --ink: #1e1c1a;
+  --ink2: #6b6560;
+  --ink3: #a09890;
+  --green: #4a7c59;
+  --green-light: #e8f0ea;
+  --amber: #c47c2b;
+  --amber-light: #fdf0e0;
+  --red: #b94040;
+  --red-light: #fce8e8;
+  --blue: #3a6080;
+  --blue-light: #e4edf5;
+  --border: rgba(30,28,26,0.08);
+  --shadow: 0 2px 12px rgba(30,28,26,0.07);
+  --shadow-md: 0 4px 24px rgba(30,28,26,0.1);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+html[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #242424;
+  --surface2: #2e2e2e;
+  --ink: #f0ede8;
+  --ink2: #b0a89e;
+  --ink3: #706860;
+  --green: #5a9c6e;
+  --green-light: #1e3328;
+  --amber: #d4903a;
+  --amber-light: #2e2010;
+  --red: #c95050;
+  --red-light: #2e1010;
+  --blue: #4a80aa;
+  --blue-light: #0e2030;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+.wrap { max-width: 640px; margin: 0 auto; padding: 1rem 1rem 5rem; }
+
+/* ─── HEADER ─── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; padding: .9rem 0 1.1rem;
+}
+.header-side { display: flex; align-items: center; gap: .5rem; }
+.back-link {
+  display: inline-flex; align-items: center; gap: .35rem;
+  color: var(--ink2); text-decoration: none; font-size: .88rem; font-weight: 600;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: .45rem .85rem; border-radius: 10px; transition: all .2s;
+}
+.back-link:hover { color: var(--green); border-color: var(--green); }
+.dark-btn {
+  border: none; background: var(--surface2); border-radius: 8px;
+  padding: .35rem .55rem; cursor: pointer; font-size: 1rem;
+}
+.hero { text-align: center; margin: 1.2rem 0 1.6rem; }
+.hero h1 {
+  font-family: 'Cairo', sans-serif; font-weight: 900; font-size: 1.7rem;
+  color: var(--green); margin-bottom: .4rem;
+}
+.hero p { color: var(--ink2); font-size: .92rem; line-height: 1.8; max-width: 420px; margin: 0 auto; }
+
+/* ─── ADD BUTTON ─── */
+.btn-main {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  width: 100%; padding: 1rem; border: none; border-radius: var(--radius);
+  background: var(--green); color: #fff; font-family: 'Cairo', sans-serif;
+  font-weight: 700; font-size: 1.05rem; cursor: pointer;
+  box-shadow: var(--shadow-md); transition: all .2s; margin-bottom: 1.4rem;
+}
+html[data-theme="dark"] .btn-main { color: #132a1b; }
+.btn-main:hover { transform: translateY(-2px); }
+
+/* ─── FORM ─── */
+.form-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.6rem;
+  box-shadow: var(--shadow); display: none;
+}
+.form-card.open { display: block; }
+.field { margin-bottom: 1.1rem; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block; font-weight: 700; font-size: .9rem; margin-bottom: .45rem;
+}
+.field label .hint { font-weight: 400; color: var(--ink3); font-size: .78rem; }
+.field input, .field textarea {
+  width: 100%; padding: .75rem .9rem; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); background: var(--bg); color: var(--ink);
+  font-family: 'Tajawal', sans-serif; font-size: .95rem; transition: border-color .2s;
+}
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--green); }
+.field textarea { resize: vertical; min-height: 80px; line-height: 1.7; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+.or-divider {
+  display: flex; align-items: center; gap: .7rem; color: var(--ink3);
+  font-size: .8rem; margin: .8rem 0;
+}
+.or-divider::before, .or-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+.form-actions { display: flex; gap: .6rem; margin-top: 1.2rem; }
+.btn-save {
+  flex: 1; padding: .85rem; border: none; border-radius: var(--radius-sm);
+  background: var(--green); color: #fff; font-family: 'Tajawal', sans-serif;
+  font-weight: 700; font-size: .95rem; cursor: pointer;
+}
+html[data-theme="dark"] .btn-save { color: #132a1b; }
+.btn-cancel {
+  padding: .85rem 1.2rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: transparent; color: var(--ink2); font-family: 'Tajawal', sans-serif;
+  font-weight: 600; font-size: .95rem; cursor: pointer;
+}
+.form-error {
+  display: none; background: var(--red-light); color: var(--red);
+  border-radius: var(--radius-sm); padding: .6rem .9rem; font-size: .85rem;
+  font-weight: 600; margin-bottom: 1rem;
+}
+
+/* ─── SECTIONS & CARDS ─── */
+.section-title {
+  font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 1.05rem;
+  margin: 1.4rem 0 .8rem; display: flex; align-items: center; gap: .5rem;
+}
+.section-title .count {
+  background: var(--green-light); color: var(--green); border-radius: 20px;
+  font-size: .75rem; padding: .1rem .6rem; font-family: 'Tajawal', sans-serif;
+}
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1rem 1.1rem; margin-bottom: .8rem;
+  cursor: pointer; transition: all .2s; box-shadow: var(--shadow);
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; }
+.card-subject { font-weight: 700; font-size: 1rem; }
+.card-date { color: var(--ink3); font-size: .72rem; white-space: nowrap; }
+.card-src {
+  display: inline-flex; align-items: center; gap: .3rem; margin-top: .45rem;
+  background: var(--blue-light); color: var(--blue); border-radius: 8px;
+  font-size: .75rem; font-weight: 600; padding: .2rem .6rem;
+}
+.card-attempt {
+  color: var(--ink2); font-size: .85rem; margin-top: .5rem; line-height: 1.7;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.empty {
+  text-align: center; color: var(--ink3); padding: 2.5rem 1rem; font-size: .92rem;
+  line-height: 1.9; background: var(--surface); border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+/* ─── DETAIL MODAL ─── */
+.overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  z-index: 500; align-items: flex-end; justify-content: center; padding: 0;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border-radius: 20px 20px 0 0; width: 100%;
+  max-width: 640px; max-height: 88vh; overflow-y: auto;
+  padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 640px) {
+  .overlay { align-items: center; padding: 1rem; }
+  .modal { border-radius: 20px; }
+}
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 1rem; }
+.modal-subject { font-family: 'Cairo', sans-serif; font-weight: 900; font-size: 1.25rem; margin-bottom: .3rem; }
+.modal-date { color: var(--ink3); font-size: .78rem; margin-bottom: 1.1rem; }
+.detail-block { margin-bottom: 1.1rem; }
+.detail-block .lbl {
+  font-weight: 700; font-size: .82rem; color: var(--ink2); margin-bottom: .4rem;
+  display: flex; align-items: center; gap: .35rem;
+}
+.detail-block .val {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: .8rem .95rem; font-size: .92rem; line-height: 1.8; white-space: pre-wrap; word-break: break-word;
+}
+.src-open {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  width: 100%; padding: .9rem; border-radius: var(--radius-sm);
+  background: var(--blue-light); color: var(--blue); text-decoration: none;
+  font-weight: 700; font-size: .95rem; margin-bottom: 1.1rem; transition: all .2s;
+  border: 1.5px solid transparent;
+}
+.src-open:hover { border-color: var(--blue); }
+.modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.m-btn {
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+  padding: .8rem .5rem; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+  background: var(--surface2); color: var(--ink); font-family: 'Tajawal', sans-serif;
+  font-weight: 700; font-size: .88rem; cursor: pointer; text-decoration: none;
+  transition: all .2s;
+}
+.m-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.m-btn.green { background: var(--green); border-color: var(--green); color: #fff; }
+html[data-theme="dark"] .m-btn.green { color: #132a1b; }
+.m-btn.wa { background: var(--green-light); border-color: transparent; color: var(--green); }
+.m-btn.red { background: var(--red-light); border-color: transparent; color: var(--red); }
+.m-btn.amber { background: var(--amber-light); border-color: transparent; color: var(--amber); }
+.solved-badge {
+  display: inline-block; background: var(--green-light); color: var(--green);
+  border-radius: 20px; font-size: .75rem; font-weight: 700; padding: .15rem .7rem;
+  margin-bottom: .8rem;
+}
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed; bottom: 1.5rem; right: 50%; transform: translateX(50%) translateY(80px);
+  background: var(--ink); color: var(--bg); padding: .7rem 1.3rem; border-radius: 30px;
+  font-size: .88rem; font-weight: 600; z-index: 600; opacity: 0;
+  transition: all .3s; pointer-events: none; box-shadow: var(--shadow-md);
+}
+.toast.show { opacity: 1; transform: translateX(50%) translateY(0); }
+
+.back-home {
+  display: block; text-align: center; margin-top: 2rem; color: var(--ink3);
+  font-size: .82rem; text-decoration: none;
+}
+.back-home:hover { color: var(--green); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-side">
+      <a class="back-link" href="index.html">→ رجوع لـ مُنَظَّمْ</a>
+    </div>
+    <button class="dark-btn" id="darkBtn" onclick="toggleDark()" title="تبديل الوضع">🌙</button>
+  </div>
+
+  <div class="hero">
+    <h1>📍 كنت واقف فين؟</h1>
+    <p>علقت في مسألة وانت بتذاكر؟ سجّل مكانها ومحاولتك وسؤالك، وارجعلها بعدين من نفس النقطة، أو ابعت سؤالك لمدرّسك.</p>
+  </div>
+
+  <button class="btn-main" id="addBtn" onclick="toggleForm()">📍 سجّل مكاني</button>
+
+  <div class="form-card" id="formCard">
+    <div class="form-error" id="formError"></div>
+
+    <div class="field">
+      <label>المادة / الدرس <span class="hint">(مثال: فيزياء - درس المجال المغناطيسي)</span></label>
+      <input type="text" id="fSubject" placeholder="اكتب اسم المادة أو الدرس">
+    </div>
+
+    <div class="field">
+      <label>المصدر</label>
+      <input type="url" id="fLink" placeholder="لينك الفيديو (يوتيوب أو غيره)" dir="ltr" style="text-align:left">
+      <div style="height:.6rem"></div>
+      <div class="field-row">
+        <input type="text" id="fTime" placeholder="التوقيت (مثال: 12:35)" dir="ltr" style="text-align:left">
+        <input type="text" id="fPage" placeholder="أو رقم صفحة الكتاب" inputmode="numeric">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>محاولتك <span class="hint">(حليت لحد فين وواقف فين بالظبط)</span></label>
+      <textarea id="fAttempt" placeholder="مثال: حليت أول خطوتين وعوّضت بالقانون، بس واقف عند التعويض في المعادلة التانية..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>سؤالك <span class="hint">(سؤال واحد تسأله للمدرّس)</span></label>
+      <textarea id="fQuestion" placeholder="مثال: ليه بنعكس الإشارة في الخطوة دي؟" style="min-height:60px"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-save" onclick="saveCard()">احفظ مكاني 📍</button>
+      <button class="btn-cancel" onclick="toggleForm(true)">إلغاء</button>
+    </div>
+  </div>
+
+  <div class="section-title">أماكنك المحفوظة <span class="count" id="openCount">0</span></div>
+  <div id="openList"></div>
+
+  <div class="section-title" id="solvedTitle" style="display:none">✅ اللي اتحل <span class="count" id="solvedCount">0</span></div>
+  <div id="solvedList"></div>
+
+  <a class="back-home" href="index.html">مُنَظَّمْ — نظّم مذاكرتك</a>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_KEY = 'kont-wakef-cards';
+
+/* ─── theme (shared with index.html) ─── */
+function applyTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('darkBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
+}
+function toggleDark() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('darkBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+}
+applyTheme();
+
+/* ─── storage ─── */
+function loadCards() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+  catch(e) { return []; }
+}
+function storeCards(cards) {
+  localStorage.setItem(LS_KEY, JSON.stringify(cards));
+}
+
+/* ─── helpers ─── */
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function timeToSeconds(t) {
+  if (!t) return null;
+  t = t.trim();
+  if (/^\d+$/.test(t)) return parseInt(t, 10);
+  const parts = t.split(':').map(p => parseInt(p, 10));
+  if (parts.some(isNaN) || parts.length > 3) return null;
+  let s = 0;
+  for (const p of parts) s = s * 60 + p;
+  return s;
+}
+function isYouTube(u) {
+  try {
+    const h = new URL(u).hostname.replace(/^www\.|^m\./, '');
+    return h === 'youtube.com' || h === 'youtu.be' || h.endsWith('.youtube.com');
+  } catch(e) { return false; }
+}
+function buildSourceUrl(card) {
+  if (!card.link) return null;
+  const secs = timeToSeconds(card.time);
+  if (secs && isYouTube(card.link)) {
+    try {
+      const u = new URL(card.link);
+      const h = u.hostname.replace(/^www\.|^m\./, '');
+      if (h === 'youtu.be') {
+        return 'https://youtu.be' + u.pathname + '?t=' + secs + 's';
+      }
+      const v = u.searchParams.get('v');
+      if (v) return 'https://www.youtube.com/watch?v=' + v + '&t=' + secs + 's';
+      u.searchParams.set('t', secs + 's');
+      return u.toString();
+    } catch(e) { return card.link; }
+  }
+  return card.link;
+}
+function srcLabel(card) {
+  if (card.link) return '🎬 فيديو' + (card.time ? ' • ' + esc(card.time) : '');
+  if (card.page) return '📖 صفحة ' + esc(card.page);
+  return '📌 مصدر';
+}
+function fmtDate(ts) {
+  const d = new Date(ts);
+  return d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' });
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ─── form ─── */
+function toggleForm(forceClose) {
+  const card = document.getElementById('formCard');
+  const open = forceClose === true ? false : !card.classList.contains('open');
+  card.classList.toggle('open', open);
+  document.getElementById('addBtn').textContent = open ? '✖ قفل التسجيل' : '📍 سجّل مكاني';
+  if (open) {
+    document.getElementById('formError').style.display = 'none';
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+function saveCard() {
+  const subject = document.getElementById('fSubject').value.trim();
+  const link = document.getElementById('fLink').value.trim();
+  const time = document.getElementById('fTime').value.trim();
+  const page = document.getElementById('fPage').value.trim();
+  const attempt = document.getElementById('fAttempt').value.trim();
+  const question = document.getElementById('fQuestion').value.trim();
+  const err = document.getElementById('formError');
+
+  let msg = '';
+  if (!subject) msg = 'اكتب اسم المادة أو الدرس الأول';
+  else if (!link && !page) msg = 'اكتب المصدر: لينك الفيديو أو رقم صفحة الكتاب';
+  else if (link && !/^https?:\/\//i.test(link)) msg = 'اللينك لازم يبدأ بـ http:// أو https://';
+  else if (time && timeToSeconds(time) === null) msg = 'التوقيت مش مفهوم، اكتبه زي 12:35 أو بالثواني';
+  else if (!attempt) msg = 'اكتب محاولتك: حليت لحد فين وواقف فين';
+  else if (!question) msg = 'اكتب سؤالك للمدرّس';
+
+  if (msg) {
+    err.textContent = '⚠️ ' + msg;
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+
+  const cards = loadCards();
+  cards.unshift({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    subject, link, time, page, attempt, question,
+    solved: false, createdAt: Date.now()
+  });
+  storeCards(cards);
+
+  ['fSubject','fLink','fTime','fPage','fAttempt','fQuestion'].forEach(id => document.getElementById(id).value = '');
+  toggleForm(true);
+  render();
+  toast('📍 مكانك اتحفظ');
+}
+
+/* ─── render ─── */
+function cardHTML(c) {
+  return '<div class="card" onclick="openModal(\'' + c.id + '\')">' +
+    '<div class="card-top"><div class="card-subject">' + esc(c.subject) + '</div>' +
+    '<div class="card-date">' + fmtDate(c.createdAt) + '</div></div>' +
+    '<span class="card-src">' + srcLabel(c) + '</span>' +
+    '<div class="card-attempt">' + esc(c.attempt) + '</div>' +
+    '</div>';
+}
+function render() {
+  const cards = loadCards();
+  const open = cards.filter(c => !c.solved);
+  const solved = cards.filter(c => c.solved);
+
+  document.getElementById('openCount').textContent = open.length;
+  document.getElementById('solvedCount').textContent = solved.length;
+  document.getElementById('solvedTitle').style.display = solved.length ? 'flex' : 'none';
+
+  document.getElementById('openList').innerHTML = open.length
+    ? open.map(cardHTML).join('')
+    : '<div class="empty">لسه مفيش أماكن محفوظة.<br>أول مرة تعلق في مسألة، دوس "سجّل مكاني" وهتلاقيها هنا. 📍</div>';
+
+  document.getElementById('solvedList').innerHTML = solved.map(cardHTML).join('');
+}
+
+/* ─── modal ─── */
+function openModal(id) {
+  const c = loadCards().find(x => x.id === id);
+  if (!c) return;
+  const srcUrl = buildSourceUrl(c);
+  const q = c.question;
+  const waText = 'سؤال في ' + c.subject + ':\n' + q + (srcUrl ? '\nالمصدر: ' + srcUrl : (c.page ? '\nصفحة ' + c.page : ''));
+
+  let srcBlock;
+  if (srcUrl) {
+    const lbl = isYouTube(c.link) && timeToSeconds(c.time)
+      ? '▶️ افتح الفيديو من دقيقة ' + esc(c.time)
+      : '🔗 افتح المصدر';
+    srcBlock = '<a class="src-open" href="' + esc(srcUrl) + '" target="_blank" rel="noopener">' + lbl + '</a>';
+  } else if (c.page) {
+    srcBlock = '<a class="src-open" href="#" onclick="return false" style="cursor:default">📖 افتح الكتاب صفحة ' + esc(c.page) + '</a>';
+  } else {
+    srcBlock = '';
+  }
+
+  document.getElementById('modalBody').innerHTML =
+    '<div class="modal-handle"></div>' +
+    (c.solved ? '<span class="solved-badge">✅ اتحلت</span>' : '') +
+    '<div class="modal-subject">' + esc(c.subject) + '</div>' +
+    '<div class="modal-date">اتسجّلت يوم ' + fmtDate(c.createdAt) + '</div>' +
+    srcBlock +
+    '<div class="detail-block"><div class="lbl">✍️ محاولتك</div><div class="val">' + esc(c.attempt) + '</div></div>' +
+    '<div class="detail-block"><div class="lbl">❓ سؤالك</div><div class="val">' + esc(c.question) + '</div></div>' +
+    '<div class="modal-actions">' +
+      '<button class="m-btn" onclick="copyQuestion(\'' + c.id + '\')">📋 انسخ السؤال</button>' +
+      '<a class="m-btn wa" href="https://wa.me/?text=' + encodeURIComponent(waText) + '" target="_blank" rel="noopener">💬 ابعته واتساب</a>' +
+      (c.solved
+        ? '<button class="m-btn amber" onclick="moveCard(\'' + c.id + '\', false)">↩️ لسه متحلّتش</button>'
+        : '<button class="m-btn green" onclick="moveCard(\'' + c.id + '\', true)">✅ اتحلت</button>') +
+      '<button class="m-btn red" onclick="delCard(\'' + c.id + '\')">🗑 امسح</button>' +
+    '</div>';
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+}
+function copyQuestion(id) {
+  const c = loadCards().find(x => x.id === id);
+  if (!c) return;
+  const text = 'سؤال في ' + c.subject + ':\n' + c.question;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => toast('📋 السؤال اتنسخ'), () => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); toast('📋 السؤال اتنسخ'); }
+  catch(e) { toast('مقدرتش أنسخ، انسخه بإيدك'); }
+  document.body.removeChild(ta);
+}
+function moveCard(id, solved) {
+  const cards = loadCards();
+  const c = cards.find(x => x.id === id);
+  if (!c) return;
+  c.solved = solved;
+  storeCards(cards);
+  closeModal();
+  render();
+  toast(solved ? '✅ برافو! نقلناها للي اتحل' : '↩️ رجعناها تاني');
+}
+function delCard(id) {
+  if (!confirm('متأكد إنك عايز تمسح المكان ده؟')) return;
+  storeCards(loadCards().filter(x => x.id !== id));
+  closeModal();
+  render();
+  toast('🗑 اتمسح');
+}
+
+render();
+</script>
+</body>
+</html>
