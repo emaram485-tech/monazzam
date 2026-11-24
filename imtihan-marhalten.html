@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امتحان على مرحلتين | مُنَظَّمْ</title>
+<meta name="theme-color" content="#4a7c59">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Cairo:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0ede8;
+  --surface: #faf8f5;
+  --surface2: #f5f2ed;
+  --ink: #1e1c1a;
+  --ink2: #6b6560;
+  --ink3: #a09890;
+  --green: #4a7c59;
+  --green-light: #e8f0ea;
+  --amber: #c47c2b;
+  --amber-light: #fdf0e0;
+  --red: #b94040;
+  --red-light: #fce8e8;
+  --blue: #3a6080;
+  --blue-light: #e4edf5;
+  --border: rgba(30,28,26,0.08);
+  --shadow: 0 2px 12px rgba(30,28,26,0.07);
+  --shadow-md: 0 4px 24px rgba(30,28,26,0.1);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+html[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #242424;
+  --surface2: #2e2e2e;
+  --ink: #f0ede8;
+  --ink2: #b0a89e;
+  --ink3: #706860;
+  --green: #5a9c6e;
+  --green-light: #1e3328;
+  --amber: #d4903a;
+  --amber-light: #2e2010;
+  --red: #c95050;
+  --red-light: #2e1010;
+  --blue: #4a80aa;
+  --blue-light: #0e2030;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+.wrap { max-width: 640px; margin: 0 auto; padding: 1rem 1rem 5rem; }
+
+/* ─── HEADER ─── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; padding: .9rem 0 1.1rem;
+}
+.header-side { display: flex; align-items: center; gap: .5rem; }
+.back-link {
+  display: inline-flex; align-items: center; gap: .35rem;
+  color: var(--ink2); text-decoration: none; font-size: .88rem; font-weight: 600;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: .45rem .85rem; border-radius: 10px; transition: all .2s;
+}
+.back-link:hover { color: var(--green); border-color: var(--green); }
+.dark-btn {
+  border: none; background: var(--surface2); border-radius: 8px;
+  padding: .35rem .55rem; cursor: pointer; font-size: 1rem;
+}
+.hero { text-align: center; margin: 1.2rem 0 1.6rem; }
+.hero h1 {
+  font-family: 'Cairo', sans-serif; font-weight: 900; font-size: 1.7rem;
+  color: var(--green); margin-bottom: .4rem;
+}
+.hero p { color: var(--ink2); font-size: .92rem; line-height: 1.8; max-width: 420px; margin: 0 auto; }
+
+/* ─── ADD BUTTON ─── */
+.btn-main {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  width: 100%; padding: 1rem; border: none; border-radius: var(--radius);
+  background: var(--green); color: #fff; font-family: 'Cairo', sans-serif;
+  font-weight: 700; font-size: 1.05rem; cursor: pointer;
+  box-shadow: var(--shadow-md); transition: all .2s; margin-bottom: 1.4rem;
+}
+html[data-theme="dark"] .btn-main { color: #132a1b; }
+.btn-main:hover { transform: translateY(-2px); }
+
+
+.back-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--ink2);text-decoration:none;font-size:.88rem;font-weight:600;background:var(--surface);border:1px solid var(--border);padding:.45rem .85rem;border-radius:10px}
+.back-link:hover{color:var(--green);border-color:var(--green)}
+.dark-btn{border:none;background:var(--surface2);border-radius:8px;padding:.35rem .55rem;cursor:pointer;font-size:1rem}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0 .6rem}
+.brand{font-family:'Cairo',sans-serif;font-weight:900;color:var(--green);font-size:1.2rem}
+.hero{text-align:center;margin:.8rem 0 1.3rem}
+.hero h1{font-family:'Cairo',sans-serif;font-weight:900;font-size:1.6rem;color:var(--green);margin-bottom:.4rem}
+.hero p{color:var(--ink2);font-size:.92rem;line-height:1.8;max-width:440px;margin:0 auto}
+.btn-main{display:flex;align-items:center;justify-content:center;width:100%;padding:1rem;border:none;border-radius:var(--radius);background:var(--green);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;box-shadow:var(--shadow-md);margin:1rem 0}
+html[data-theme="dark"] .btn-main{color:#132a1b}
+.btn-sec{padding:.8rem 1.1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--ink);font-family:'Tajawal',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:.8rem;box-shadow:var(--shadow)}
+.card.click{cursor:pointer}
+.field{margin-bottom:1rem}.field label{display:block;font-weight:700;font-size:.9rem;margin-bottom:.4rem}
+.field input,.field textarea{width:100%;padding:.75rem .9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--ink);font-family:'Tajawal',sans-serif;font-size:.95rem}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--green)}
+.err{display:none;background:var(--red-light);color:var(--red);border-radius:var(--radius-sm);padding:.6rem .9rem;font-size:.85rem;font-weight:600;margin-bottom:1rem}
+.steps{display:flex;gap:.4rem;margin:.4rem 0 1.2rem}.steps i{flex:1;height:6px;border-radius:3px;background:var(--border)}.steps i.on{background:var(--green)}
+h2.t{font-family:'Cairo',sans-serif;font-weight:900;font-size:1.35rem;margin-bottom:.3rem}
+.sub{color:var(--ink2);font-size:.9rem;line-height:1.8;margin-bottom:1rem}
+.q{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:.7rem;box-shadow:var(--shadow)}
+.qh{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem;font-weight:700}
+.tag{font-size:.72rem;padding:.1rem .55rem;border-radius:20px;font-weight:700}
+.tag.sure{background:var(--green-light);color:var(--green)}.tag.guess{background:var(--amber-light);color:var(--amber)}.tag.unsure{background:var(--blue-light);color:var(--blue)}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}.opts.two{grid-template-columns:1fr 1fr}
+.opt{padding:.7rem .3rem;border:2px solid transparent;border-radius:12px;background:var(--surface2);color:var(--ink2);font-family:'Tajawal',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer}
+.opt.sure.on{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.opt.guess.on{background:var(--amber-light);border-color:var(--amber);color:var(--amber)}
+.opt.unsure.on{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+.opt.right.on{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.opt.wrong.on{background:var(--red-light);border-color:var(--red);color:var(--red)}
+.bar{position:sticky;bottom:0;padding:.8rem 0 1rem;background:linear-gradient(transparent,var(--bg) 30%)}
+.bar .btn-main{margin:0}.btn-main:disabled{opacity:.45;cursor:not-allowed}
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0}
+.box{border-radius:var(--radius);padding:1rem;text-align:center}
+.box b{display:block;font-family:'Cairo',sans-serif;font-size:2.4rem;font-weight:900;line-height:1.1}
+.box strong{display:block;font-size:.95rem;margin:.3rem 0}.box span{font-size:.78rem;opacity:.85}
+.box.amber{background:var(--amber-light);color:var(--amber)}.box.red{background:var(--red-light);color:var(--red)}
+.item{display:flex;gap:.7rem;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;margin-bottom:.5rem;border-right:5px solid var(--ink3)}
+.item.amber{border-right-color:var(--amber)}.item.red{border-right-color:var(--red)}.item.blue{border-right-color:var(--blue)}
+.item .n{font-weight:900;min-width:2rem}
+.item small{color:var(--ink2);display:block}
+.rv textarea{margin-top:.5rem;width:100%;min-height:60px;padding:.6rem;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);font-family:inherit}
+.rv .done{display:flex;gap:.5rem;align-items:center;font-size:.85rem;margin-top:.4rem;cursor:pointer}
+.coll{width:100%;text-align:right;background:var(--blue-light);color:var(--blue);border:none;border-radius:var(--radius-sm);padding:.8rem 1rem;font-family:inherit;font-weight:700;font-size:.92rem;cursor:pointer;margin:.6rem 0}
+.sess{display:flex;justify-content:space-between;align-items:center;gap:.6rem}
+.sess .nm{font-weight:700}.sess .meta{color:var(--ink3);font-size:.75rem;margin-top:.2rem}
+.pill{font-size:.72rem;padding:.15rem .6rem;border-radius:20px;background:var(--surface2);color:var(--ink2);font-weight:700;white-space:nowrap}
+.del{background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;font-family:inherit;margin-top:.3rem}
+.empty{text-align:center;color:var(--ink3);padding:2rem 1rem;line-height:1.9;background:var(--surface);border:1.5px dashed var(--border);border-radius:var(--radius)}
+.note-priv{color:var(--ink3);font-size:.75rem;text-align:center;margin-top:1.2rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <a class="back-link" href="index.html">→ رجوع لـ <span class="brand" style="font-size:.95rem">مُنَظَّمْ</span></a>
+    <button class="dark-btn" id="darkBtn" onclick="toggleDark()" title="تبديل الوضع">🌙</button>
+  </div>
+  <div id="app"></div>
+  <p class="note-priv">كل البيانات محفوظة على جهازك بس. مفيش سيرفر ولا ذكاء اصطناعي.</p>
+</div>
+<script>
+(function(){const s=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',s);})();
+function toggleDark(){const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('theme',n);}
+const KEY='imtihan_marhalten_v1';
+const CL={sure:'متأكد',guess:'خمّنت',unsure:'مش عارف أشرح'};
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let sessions=[];try{sessions=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(sessions))sessions=[];}catch(e){sessions=[];}
+let cur=null,view='list',showUnsure=false,reviewOnly=false;
+const save=()=>localStorage.setItem(KEY,JSON.stringify(sessions));
+const get=id=>sessions.find(s=>s.id===id);
+function buckets(s){const lucky=[],sw=[],un=[];
+ for(let i=0;i<s.n;i++){const c=s.conf[i],r=s.res[i];
+  if(c==='guess'&&r==='right')lucky.push(i);
+  if(c==='sure'&&r==='wrong')sw.push(i);
+  if(c==='unsure')un.push(i);}
+ return{lucky,sw,un};}
+function stepsBar(n){return '<div class="steps">'+[1,2,3].map(i=>'<i class="'+(i<=n?'on':'')+'"></i>').join('')+'</div>';}
+function render(){const a=document.getElementById('app');
+ if(view==='list')a.innerHTML=vList();
+ else if(view==='new')a.innerHTML=vNew();
+ else{const s=get(cur);if(!s){view='list';return render();}
+  a.innerHTML=view==='conf'?vConf(s):view==='marks'?vMarks(s):vResult(s);}
+ window.scrollTo(0,0);}
+function vList(){
+ let h='<div class="hero"><h1>امتحان على مرحلتين</h1><p>قبل ما تصحّح ورقة امتحان سابق، علّم كل سؤال حسب ثقتك فيه. بعد التصحيح هتشوف الصح اللي جه بالتخمين والغلط اللي كنت متأكد منه، وده اللي مش ثابت عندك فعلًا.</p></div>';
+ h+='<button class="btn-main" onclick="go(\'new\')">+ امتحان جديد</button>';
+ if(!sessions.length)h+='<div class="empty">لسه مفيش امتحانات محفوظة.<br>ابدأ بأول ورقة امتحان سابق.</div>';
+ else{h+='<h2 class="t" style="font-size:1.05rem;margin:1rem 0 .7rem">امتحاناتك المحفوظة</h2>';
+  sessions.slice().sort((x,y)=>y.created-x.created).forEach(s=>{
+   const st=s.stage===3?'النتيجة جاهزة':s.stage===2?'في انتظار العلامات':'في انتظار التقييم';
+   h+='<div class="card"><div class="sess click" style="cursor:pointer" onclick="openS(\''+s.id+'\')"><div><div class="nm">'+esc(s.name)+'</div><div class="meta">'+esc(s.subject)+' · '+AR(s.n)+' سؤال · '+new Date(s.created).toLocaleDateString('ar-EG')+'</div></div><span class="pill">'+st+'</span></div><button class="del" onclick="delS(\''+s.id+'\')">مسح</button></div>';});}
+ return h;}
+function vNew(){return '<h2 class="t">امتحان جديد</h2><p class="sub">اكتب بيانات الورقة. مفيش محتوى بتنسخه، إنت بس بتسجّل ثقتك وعلاماتك.</p><div class="err" id="err"></div>'+
+ '<div class="field"><label>المادة</label><input id="fs" placeholder="مثلًا: فيزياء"></div>'+
+ '<div class="field"><label>اسم الامتحان</label><input id="fn" placeholder="مثلًا: امتحان 2024 دور أول"></div>'+
+ '<div class="field"><label>عدد الأسئلة</label><input id="fq" type="number" inputmode="numeric" min="1" max="200" placeholder="مثلًا: 20"></div>'+
+ '<div style="display:flex;gap:.6rem"><button class="btn-main" style="margin:0" onclick="create()">ابدأ</button><button class="btn-sec" onclick="go(\'list\')">إلغاء</button></div>';}
+function create(){const subj=fs.value.trim(),name=fn.value.trim(),n=parseInt(fq.value,10);
+ const e=document.getElementById('err');let m='';
+ if(!subj)m='اكتب اسم المادة.';else if(!name)m='اكتب اسم الامتحان.';else if(!(n>=1&&n<=200))m='عدد الأسئلة لازم يكون من ١ لـ ٢٠٠.';
+ if(m){e.textContent=m;e.style.display='block';return;}
+ const s={id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),subject:subj,name:name,n:n,conf:Array(n).fill(null),res:Array(n).fill(null),notes:{},reviewed:{},stage:1,created:Date.now()};
+ sessions.push(s);save();cur=s.id;view='conf';render();}
+function go(v){view=v;render();}
+function openS(id){cur=id;const s=get(id);view=s.stage===1?'conf':s.stage===2?'marks':'result';showUnsure=false;reviewOnly=false;render();}
+function delS(id){if(!confirm('تمسح الامتحان ده؟'))return;sessions=sessions.filter(s=>s.id!==id);save();render();}
+function head(s,step){return '<h2 class="t">'+(step===1?'قبل ما تصحّح: حس إيه؟':step===2?'صحّحت إزاي؟':'اللي مش ثابت عندك فعلًا')+'</h2><p class="sub">'+esc(s.subject)+' · '+esc(s.name)+'</p>'+stepsBar(step);}
+function vConf(s){const done=s.conf.filter(Boolean).length;
+ let h='<button class="btn-sec" onclick="go(\'list\')" style="margin-bottom:.8rem">← الامتحانات</button>'+head(s,1)+'<p class="sub">علّم كل سؤال حسب ثقتك فيه، من غير ما تبص على الإجابات. التقدم بيتحفظ تلقائي.</p>';
+ for(let i=0;i<s.n;i++){h+='<div class="q"><div class="qh">سؤال '+AR(i+1)+'</div><div class="opts">'+['sure','guess','unsure'].map(k=>'<button class="opt '+k+(s.conf[i]===k?' on':'')+'" onclick="setC(\''+s.id+'\','+i+',\''+k+'\')">'+CL[k]+'</button>').join('')+'</div></div>';}
+ h+='<div class="bar"><button class="btn-main" id="nxt" '+(done<s.n?'disabled':'')+' onclick="toMarks(\''+s.id+'\')">خلّصت التقييم، يلا نصحّح ('+AR(done)+' من '+AR(s.n)+')</button></div>';return h;}
+function setC(id,i,k){const s=get(id);s.conf[i]=k;save();const y=window.scrollY;render();window.scrollTo(0,y);}
+function toMarks(id){const s=get(id);if(s.conf.some(c=>!c))return;s.stage=Math.max(s.stage,2);save();view='marks';render();}
+function vMarks(s){const done=s.res.filter(Boolean).length;
+ let h='<button class="btn-sec" onclick="go(\'list\')" style="margin-bottom:.8rem">← الامتحانات</button>'+head(s,2)+'<p class="sub">قارن إجاباتك بالنموذج وعلّم صح أو غلط. كل علامة بتتربط بثقتك اللي سجّلتها.</p>';
+ for(let i=0;i<s.n;i++){h+='<div class="q"><div class="qh">سؤال '+AR(i+1)+' <span class="tag '+s.conf[i]+'">'+CL[s.conf[i]]+'</span></div><div class="opts two"><button class="opt right'+(s.res[i]==='right'?' on':'')+'" onclick="setR(\''+s.id+'\','+i+',\'right\')">✓ صح</button><button class="opt wrong'+(s.res[i]==='wrong'?' on':'')+'" onclick="setR(\''+s.id+'\','+i+',\'wrong\')">✗ غلط</button></div></div>';}
+ h+='<div class="bar"><button class="btn-main" '+(done<s.n?'disabled':'')+' onclick="toRes(\''+s.id+'\')">اعرض النتيجة ('+AR(done)+' من '+AR(s.n)+')</button></div>';return h;}
+function setR(id,i,k){const s=get(id);s.res[i]=k;save();const y=window.scrollY;render();window.scrollTo(0,y);}
+function toRes(id){const s=get(id);if(s.res.some(r=>!r))return;s.stage=3;save();view='result';reviewOnly=false;render();}
+function item(s,i,cls,txt){return '<div class="item '+cls+'"><span class="n">'+AR(i+1)+'</span><div>سؤال '+AR(i+1)+'<small>'+txt+'</small></div></div>';}
+function vResult(s){const b=buckets(s);const right=s.res.filter(r=>r==='right').length;const flagged=b.lucky.length+b.sw.length;
+ let h='<button class="btn-sec" onclick="go(\'list\')" style="margin-bottom:.8rem">← الامتحانات</button>'+head(s,3);
+ h+='<p class="sub">درجتك '+AR(right)+' من '+AR(s.n)+(flagged?'، بس في '+AR(flagged)+' أسئلة محتاجة تتراجع.':'. مفيش أسئلة مشبوهة، كويس جدًا.')+'</p>';
+ h+='<div class="boxes"><div class="box amber"><b>'+AR(b.lucky.length)+'</b><strong>صح بالتخمين</strong><span>جت صدفة، مش مضمونة المرة الجاية</span></div><div class="box red"><b>'+AR(b.sw.length)+'</b><strong>غلط وكنت متأكد</strong><span>فاهمها غلط، أخطر نوع</span></div></div>';
+ if(!reviewOnly){
+  if(flagged){h+='<h2 class="t" style="font-size:1.05rem">هتراجع دول الأول</h2>';b.sw.forEach(i=>h+=item(s,i,'red','كنت متأكد وطلعت غلط'));b.lucky.forEach(i=>h+=item(s,i,'amber','صح بالتخمين'));
+   h+='<div class="bar"><button class="btn-main" onclick="startRv()">راجع الـ '+AR(flagged)+' أسئلة دلوقتي</button></div>';}
+  h+='<button class="coll" onclick="tgU()">'+(showUnsure?'▾':'◂')+' مش عارف أشرح ('+AR(b.un.length)+')</button>';
+  if(showUnsure){h+=b.un.length?b.un.map(i=>item(s,i,'blue','مش عارف أشرح، '+(s.res[i]==='right'?'وطلعت صح':'وطلعت غلط'))).join(''):'<div class="empty">مفيش أسئلة هنا.</div>';}
+ } else {
+  h+='<h2 class="t" style="font-size:1.05rem">مراجعة</h2><p class="sub">لكل سؤال: ارجع للمنهج واكتب بجملتك ليه الإجابة كده. علّم "اتراجع" لما تخلص.</p>';
+  b.sw.concat(b.lucky).forEach(i=>{const k=b.sw.includes(i)?'red':'amber';h+='<div class="q rv">'+'<div class="qh">سؤال '+AR(i+1)+' <span class="tag '+(k==='red'?'':'guess')+'" style="'+(k==='red'?'background:var(--red-light);color:var(--red)':'')+'">'+(k==='red'?'غلط وكنت متأكد':'صح بالتخمين')+'</span></div><textarea placeholder="اكتب الفكرة بجملتك…" data-i="'+i+'" oninput="svNote(\''+s.id+'\','+i+',this.value)">'+esc(s.notes[i]||'')+'</textarea><label class="done"><input type="checkbox" '+(s.reviewed[i]?'checked':'')+' onchange="svRv(\''+s.id+'\','+i+',this.checked)"> اتراجع</label></div>';});
+  h+='<button class="btn-sec" onclick="reviewOnly=false;render()">← رجوع للنتيجة</button>';}
+ return h;}
+function tgU(){showUnsure=!showUnsure;const y=window.scrollY;render();window.scrollTo(0,y);}
+function startRv(){reviewOnly=true;render();}
+function svNote(id,i,v){get(id).notes[i]=v;save();}
+function svRv(id,i,v){get(id).reviewed[i]=v;save();}
+render();
+</script>
+</body>
+</html>
