@@ -1835,6 +1835,25 @@ function readStoredJSON(key, fallback) {
       </div>
     </div>
 
+    <div class="card" style="margin-top:1rem;border:1.5px solid var(--green);background:linear-gradient(135deg,var(--green-light),var(--surface))">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem">
+        <div>
+          <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;color:var(--ink)">👨‍👩‍👦 تقرير الأهل</div>
+          <div style="font-size:.78rem;color:var(--ink3);margin-top:.2rem">تقرير أسبوعي مرتب عن مذاكرتك تبعته لأهلك على واتساب، صورة أو نص جاهز للنسخ</div>
+        </div>
+        <button class="btn-primary" onclick="buildParentsReport()" style="font-size:.85rem;padding:.65rem 1.2rem">📋 اعمل التقرير</button>
+      </div>
+      <div id="parentsReportWrap" style="display:none;margin-top:1rem;text-align:center">
+        <canvas id="parentsReportCanvas" width="1080" height="1400" style="max-width:min(100%,360px);height:auto;border-radius:18px;box-shadow:var(--shadow)"></canvas>
+        <div id="parentsReportText" style="display:none;text-align:right;white-space:pre-wrap;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:.85rem;font-size:.82rem;color:var(--ink2);line-height:1.9;margin-top:.85rem"></div>
+        <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:.85rem">
+          <button class="btn-primary" onclick="downloadParentsReport()">⬇️ تحميل الصورة</button>
+          <button class="btn-sm" onclick="copyParentsReportText()">📄 نسخ نص التقرير</button>
+          <button class="btn-sm" id="parentsReportShareBtn" onclick="shareParentsReport()" style="display:none">📤 مشاركة</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ══ ANALYTICS ══ -->
@@ -6713,7 +6732,7 @@ async function refresh(){
  const [me,posts,board]=await Promise.all([api('/me'),api('/posts'),api('/leaderboard')]);cache={me,items:posts.items,board:board.items};draw();
 }
 let currentTab='leaderboard';
-const CLASSIC_TEMPLATE="  <div class=\"page\" id=\"page-community\">\n    <div class=\"page-header\">\n      <h1 class=\"page-title\">🏆 المجتمع ولوحة المتصدرين</h1>\n      <p class=\"page-sub\">نافس زمايلك في المذاكرة وشارك بطاقات المراجعة</p>\n    </div>\n\n    <div class=\"filter-tabs\" style=\"margin-bottom:1.25rem;flex-wrap:wrap\">\n      <button class=\"filter-tab active\" onclick=\"switchCommTab('leaderboard', this)\">🥇 لوحة المتصدرين</button>\n      <button class=\"filter-tab\" onclick=\"switchCommTab('decks', this)\">🃏 مكتبة البطاقات التشاركية</button>\n      <button class=\"filter-tab\" onclick=\"switchCommTab('notes', this)\">📚 ملخصات المجتمع</button>\n      <button class=\"filter-tab\" onclick=\"switchCommTab('rooms', this)\">🟢 غرف التركيز الحية</button>\n    </div>\n\n    <div id=\"comm-leaderboard\">\n      <div class=\"card\" style=\"margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem\">\n        <div>\n          <div style=\"font-weight:700;font-size:.95rem;color:var(--ink)\">شارك تقدمك في لوحة الشرف! 🚀</div>\n          <div style=\"font-size:.78rem;color:var(--ink3)\">الترتيب بنقاط المنافسة وجلسات السيرفر، منفصلة عن نجومك الشخصية</div>\n        </div>\n        <button class=\"btn-primary\" onclick=\"syncMyScoreToLeaderboard()\" style=\"font-size:.85rem;padding:.6rem 1.1rem\">🔄 تحديث لوحة الشرف</button>\n      </div>\n      <div id=\"serverControls\"></div><div class=\"card\" id=\"leaderboardList\">\n        <div class=\"empty-state\"><div class=\"empty-icon\">🏆</div><div class=\"empty-text\">اضغط \"تحديث مركزي\" لعرض المتصدرين</div></div>\n      </div>\n    </div>\n\n    <div id=\"comm-decks\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem\">\n        <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n          <h2 class=\"section-title\">📤 انشر بطاقاتك ليستفيد منها غيرك </h2>\n        </div>\n        <div style=\"display:flex;gap:.6rem;flex-wrap:wrap\">\n          <input id=\"shareDeckTitle\" class=\"input-field\" placeholder=\"عنوان المجموعة (مثال: أحياء - الباب الأول)...\" style=\"flex:2\">\n          <button class=\"btn-primary\" onclick=\"publishMyDeckToCommunity()\">نشر للمجتمع 🚀</button>\n        </div>\n      </div>\n      <div id=\"communityDecksList\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem\"></div>\n    </div>\n\n    <!-- SHARED COMMUNITY NOTES -->\n    <div id=\"comm-notes\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem\">\n        <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n          <h2 class=\"section-title\">📤 انشر ملخص أو قوانين مادة لزمايلك </h2>\n        </div>\n        <div style=\"display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem\">\n          <input id=\"commNoteTitle\" class=\"input-field\" placeholder=\"عنوان الملخص (مثال: قوانين الكهرباء - فيزياء)...\" style=\"flex:2\">\n          <select id=\"commNoteSubj\" class=\"select-field\" style=\"flex:1\">\n            <option value=\"عام\">📚 عام</option>\n            <option value=\"عربي\">عربي</option>\n            <option value=\"إنجليزي\">إنجليزي</option>\n            <option value=\"فرنساوي\">فرنساوي</option>\n            <option value=\"رياضيات\">رياضيات</option>\n            <option value=\"فيزياء\">فيزياء</option>\n            <option value=\"كيمياء\">كيمياء</option>\n            <option value=\"أحياء\">أحياء</option>\n            <option value=\"علوم متكاملة\">علوم متكاملة</option>\n            <option value=\"تاريخ\">تاريخ</option>\n            <option value=\"جغرافيا\">جغرافيا</option>\n            <option value=\"فلسفة ومنطق\">فلسفة ومنطق</option>\n          </select>\n        </div>\n        <textarea id=\"commNoteContent\" placeholder=\"اكتب الملخص أو أهم التريكات هنا...\" style=\"width:100%;min-height:90px;padding:.75rem;border:1px solid var(--border);border-radius:10px;font-family:Tajawal,sans-serif;font-size:.9rem;background:var(--surface2);color:var(--ink);outline:none;margin-bottom:.6rem\"></textarea>\n        <button class=\"btn-primary\" onclick=\"publishCommunityNote()\">نشر الملخص للمجتمع 🚀</button>\n      </div>\n      <div id=\"communityNotesList\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem\"></div>\n    </div>\n\n    <!-- LIVE STUDY ROOMS -->\n    <div id=\"comm-rooms\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem;background:linear-gradient(135deg,var(--green-light),var(--surface));border-color:var(--green)\">\n        <div style=\"display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem\">\n          <div>\n            <div style=\"font-family:Cairo,sans-serif;font-weight:900;font-size:1.15rem;color:var(--green)\">🎧 غرف المذاكرة الحية والأبطال المتصلين</div>\n            <div style=\"font-size:.82rem;color:var(--ink2);margin-top:.2rem\">أنشئ غرفة مذاكرة جماعية لزمايلك أو سجّل المادة اللي بتفرمها دلوقتي!</div>\n          </div>\n          <button class=\"btn-primary\" data-action=\"room\" style=\"background:var(--amber)\">➕ إنشاء غرفة مذاكرة جديدة</button>\n        </div>\n        <div style=\"display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.85rem\"><input id=\"serverRoom\" class=\"input-field\" maxlength=\"100\" placeholder=\"اسم الغرفة\" aria-label=\"اسم الغرفة\"><input id=\"serverGoal\" class=\"input-field\" maxlength=\"200\" placeholder=\"هدف الغرفة\" aria-label=\"هدف الغرفة\"></div><div style=\"display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.85rem\">\n          <input id=\"studyRoomStatus\" class=\"input-field\" placeholder=\"بتذاكر إيه دلوقتي؟ (مثال: بفرم الباب التاني كيمياء 🔥)...\" style=\"flex:2;background:var(--surface)\">\n          <button class=\"btn-primary\" onclick=\"joinLiveStudyRoom()\">سجّل حالتي دلوقتي ✋</button>\n        </div>\n      </div>\n\n      <!-- غرف المذاكرة الجماعية -->\n      <div class=\"card\" style=\"margin-bottom:1rem\">\n        <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n          <h2 class=\"section-title\">🏛️ غرف المذاكرة النشطة (انضم لزملائك)</h2>\n        </div>\n        <div id=\"rooms-list\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.75rem\"></div>\n      </div>\n\n      <!-- الطلاب المتصلين حالياً -->\n      <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n        <h2 class=\"section-title\">🟢 أبطال بيذاكروا في اللحظة دي</h2>\n      </div>\n      <div id=\"liveStudyRoomsList\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.85rem\"></div>\n    </div>\n  </div>\n";
+const CLASSIC_TEMPLATE="  <div class=\"page\" id=\"page-community\">\n    <div class=\"page-header\">\n      <h1 class=\"page-title\">🏆 المجتمع ولوحة المتصدرين</h1>\n      <p class=\"page-sub\">نافس زمايلك في المذاكرة وشارك بطاقات المراجعة</p>\n    </div>\n\n    <div class=\"filter-tabs\" style=\"margin-bottom:1.25rem;flex-wrap:wrap\">\n      <button class=\"filter-tab active\" onclick=\"switchCommTab('leaderboard', this)\">🥇 لوحة المتصدرين</button>\n      <button class=\"filter-tab\" onclick=\"switchCommTab('decks', this)\">🃏 مكتبة البطاقات التشاركية</button>\n      <button class=\"filter-tab\" onclick=\"switchCommTab('notes', this)\">📚 ملخصات المجتمع</button>\n      <button class=\"filter-tab\" onclick=\"switchCommTab('rooms', this)\">🟢 غرف التركيز الحية</button>\n    <button class=\"filter-tab\">🔥 تحدي صديق</button>\n        </div>\n\n    <div id=\"comm-leaderboard\">\n      <div class=\"card\" style=\"margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem\">\n        <div>\n          <div style=\"font-weight:700;font-size:.95rem;color:var(--ink)\">شارك تقدمك في لوحة الشرف! 🚀</div>\n          <div style=\"font-size:.78rem;color:var(--ink3)\">الترتيب بنقاط المنافسة وجلسات السيرفر، منفصلة عن نجومك الشخصية</div>\n        </div>\n        <button class=\"btn-primary\" onclick=\"syncMyScoreToLeaderboard()\" style=\"font-size:.85rem;padding:.6rem 1.1rem\">🔄 تحديث لوحة الشرف</button>\n      </div>\n      <div id=\"serverControls\"></div><div class=\"card\" id=\"leaderboardList\">\n        <div class=\"empty-state\"><div class=\"empty-icon\">🏆</div><div class=\"empty-text\">اضغط \"تحديث مركزي\" لعرض المتصدرين</div></div>\n      </div>\n    </div>\n\n    <div id=\"comm-decks\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem\">\n        <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n          <h2 class=\"section-title\">📤 انشر بطاقاتك ليستفيد منها غيرك </h2>\n        </div>\n        <div style=\"display:flex;gap:.6rem;flex-wrap:wrap\">\n          <input id=\"shareDeckTitle\" class=\"input-field\" placeholder=\"عنوان المجموعة (مثال: أحياء - الباب الأول)...\" style=\"flex:2\">\n          <button class=\"btn-primary\" onclick=\"publishMyDeckToCommunity()\">نشر للمجتمع 🚀</button>\n        </div>\n      </div>\n      <div id=\"communityDecksList\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem\"></div>\n    </div>\n\n    <!-- SHARED COMMUNITY NOTES -->\n    <div id=\"comm-notes\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem\">\n        <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n          <h2 class=\"section-title\">📤 انشر ملخص أو قوانين مادة لزمايلك </h2>\n        </div>\n        <div style=\"display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem\">\n          <input id=\"commNoteTitle\" class=\"input-field\" placeholder=\"عنوان الملخص (مثال: قوانين الكهرباء - فيزياء)...\" style=\"flex:2\">\n          <select id=\"commNoteSubj\" class=\"select-field\" style=\"flex:1\">\n            <option value=\"عام\">📚 عام</option>\n            <option value=\"عربي\">عربي</option>\n            <option value=\"إنجليزي\">إنجليزي</option>\n            <option value=\"فرنساوي\">فرنساوي</option>\n            <option value=\"رياضيات\">رياضيات</option>\n            <option value=\"فيزياء\">فيزياء</option>\n            <option value=\"كيمياء\">كيمياء</option>\n            <option value=\"أحياء\">أحياء</option>\n            <option value=\"علوم متكاملة\">علوم متكاملة</option>\n            <option value=\"تاريخ\">تاريخ</option>\n            <option value=\"جغرافيا\">جغرافيا</option>\n            <option value=\"فلسفة ومنطق\">فلسفة ومنطق</option>\n          </select>\n        </div>\n        <textarea id=\"commNoteContent\" placeholder=\"اكتب الملخص أو أهم التريكات هنا...\" style=\"width:100%;min-height:90px;padding:.75rem;border:1px solid var(--border);border-radius:10px;font-family:Tajawal,sans-serif;font-size:.9rem;background:var(--surface2);color:var(--ink);outline:none;margin-bottom:.6rem\"></textarea>\n        <button class=\"btn-primary\" onclick=\"publishCommunityNote()\">نشر الملخص للمجتمع 🚀</button>\n      </div>\n      <div id=\"communityNotesList\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem\"></div>\n    </div>\n\n    <!-- LIVE STUDY ROOMS -->\n    <div id=\"comm-rooms\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem;background:linear-gradient(135deg,var(--green-light),var(--surface));border-color:var(--green)\">\n        <div style=\"display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem\">\n          <div>\n            <div style=\"font-family:Cairo,sans-serif;font-weight:900;font-size:1.15rem;color:var(--green)\">🎧 غرف المذاكرة الحية والأبطال المتصلين</div>\n            <div style=\"font-size:.82rem;color:var(--ink2);margin-top:.2rem\">أنشئ غرفة مذاكرة جماعية لزمايلك أو سجّل المادة اللي بتفرمها دلوقتي!</div>\n          </div>\n          <button class=\"btn-primary\" data-action=\"room\" style=\"background:var(--amber)\">➕ إنشاء غرفة مذاكرة جديدة</button>\n        </div>\n        <div style=\"display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.85rem\"><input id=\"serverRoom\" class=\"input-field\" maxlength=\"100\" placeholder=\"اسم الغرفة\" aria-label=\"اسم الغرفة\"><input id=\"serverGoal\" class=\"input-field\" maxlength=\"200\" placeholder=\"هدف الغرفة\" aria-label=\"هدف الغرفة\"></div><div style=\"display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.85rem\">\n          <input id=\"studyRoomStatus\" class=\"input-field\" placeholder=\"بتذاكر إيه دلوقتي؟ (مثال: بفرم الباب التاني كيمياء 🔥)...\" style=\"flex:2;background:var(--surface)\">\n          <button class=\"btn-primary\" onclick=\"joinLiveStudyRoom()\">سجّل حالتي دلوقتي ✋</button>\n        </div>\n      </div>\n\n      <!-- غرف المذاكرة الجماعية -->\n      <div class=\"card\" style=\"margin-bottom:1rem\">\n        <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n          <h2 class=\"section-title\">🏛️ غرف المذاكرة النشطة (انضم لزملائك)</h2>\n        </div>\n        <div id=\"rooms-list\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.75rem\"></div>\n      </div>\n\n      <!-- الطلاب المتصلين حالياً -->\n      <div class=\"section-head\" style=\"margin-bottom:.75rem\">\n        <h2 class=\"section-title\">🟢 أبطال بيذاكروا في اللحظة دي</h2>\n      </div>\n      <div id=\"liveStudyRoomsList\" style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.85rem\"></div>\n    </div>\n<div id=\"comm-streak\" style=\"display:none\">\n      <div class=\"card\" style=\"margin-bottom:1rem;background:linear-gradient(135deg,var(--amber-light),var(--surface));border-color:var(--amber)\">\n        <div style=\"display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem\">\n          <div>\n            <div style=\"font-family:Cairo,sans-serif;font-weight:900;font-size:1.15rem;color:var(--amber)\">🔥 سلسلة التحدي المشترك</div>\n            <div style=\"font-size:.82rem;color:var(--ink2);margin-top:.2rem\">اتحدى صاحبك: كل يوم تذاكروا الاتنين 25 دقيقة تركيز على الأقل، السلسلة بتكبر. حد فيكم فوّت يوم؟ السلسلة بتقع! خصوصيتك محفوظة: صاحبك يشوف بس ذاكرت ولا لأ، من غير مواد ولا مهام ولا تفاصيل.</div>\n          </div>\n        </div>\n      </div>\n\n      <div id=\"streakSetup\" style=\"display:none\">\n        <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem\">\n          <div class=\"card\">\n            <div style=\"font-family:Cairo,sans-serif;font-weight:900;font-size:1rem;color:var(--ink);margin-bottom:.35rem\">🚀 ابدأ تحدي جديد</div>\n            <div style=\"font-size:.8rem;color:var(--ink3);margin-bottom:.75rem;line-height:1.7\">هيطلعلك كود دعوة، ابعته لصاحبك يدخل بيه من عنده. الكود صالح 48 ساعة وبيشتغل مرة واحدة بس</div>\n            <button class=\"btn-primary\" onclick=\"createFriendInvite()\" style=\"width:100%;background:var(--amber)\">⚡ اعمل كود دعوة</button>\n          </div>\n          <div class=\"card\">\n            <div style=\"font-family:Cairo,sans-serif;font-weight:900;font-size:1rem;color:var(--ink);margin-bottom:.35rem\">🤝 عندك كود من صاحبك؟</div>\n            <div style=\"font-size:.8rem;color:var(--ink3);margin-bottom:.75rem;line-height:1.7\">اكتبه هنا، وبدخولك أنت وافقت على التحدي وعلى إنه يشوف أيام مذاكرتك (نعم/لا فقط)</div>\n            <div style=\"display:flex;gap:.5rem\">\n              <input id=\"streakJoinCode\" class=\"input-field\" placeholder=\"مثال: K7M2QP\" maxlength=\"6\" style=\"flex:1;text-align:center;letter-spacing:.35em;font-weight:800;text-transform:uppercase\">\n              <button class=\"btn-primary\" onclick=\"acceptFriendInvite()\">اقبل التحدي</button>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <div id=\"streakPending\" style=\"display:none\">\n        <div class=\"card\" style=\"text-align:center;border:1.5px dashed var(--amber)\">\n          <div style=\"font-size:.85rem;color:var(--ink3);font-weight:700\">⏳ مستني صاحبك يدخل بالكود ده</div>\n          <div id=\"streakPendingCode\" style=\"font-family:monospace;font-weight:900;font-size:2.6rem;color:var(--amber);letter-spacing:.4em;margin:.75rem 0\"></div>\n          <div style=\"font-size:.78rem;color:var(--ink3);margin-bottom:.85rem\">ابعته له في أي مكان — أول ما يدخله هيبدأ التحدي ويظهر هنا</div>\n          <div style=\"display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap\">\n            <button class=\"btn-primary\" onclick=\"copyStreakCode()\" style=\"background:var(--amber)\">📋 نسخ الكود</button>\n            <button class=\"btn-sm\" onclick=\"leaveFriendStreak(true)\" style=\"border-color:var(--red);color:var(--red)\">إلغاء الدعوة</button>\n          </div>\n        </div>\n      </div>\n\n      <div id=\"streakActive\" style=\"display:none\">\n        <div class=\"card\" style=\"margin-bottom:1rem;text-align:center;border:1.5px solid var(--amber)\">\n          <div style=\"font-size:.8rem;color:var(--ink3);font-weight:700\">🔥 السلسلة المشتركة</div>\n          <div id=\"streakBigNum\" style=\"font-family:Cairo,sans-serif;font-weight:900;font-size:3.6rem;color:var(--amber);line-height:1.2\">0</div>\n          <div style=\"font-size:.85rem;color:var(--ink2);font-weight:700\">يوم مذاكرة متتالي مع بعض</div>\n          <div id=\"streakTodayLine\" style=\"font-size:.78rem;color:var(--ink3);margin-top:.4rem\"></div>\n          <div id=\"streakWeekDots\" style=\"display:flex;justify-content:center;gap:.4rem;margin-top:.85rem;flex-wrap:wrap\"></div>\n        </div>\n\n        <div id=\"streakMembers\" style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem;margin-bottom:1rem\"></div>\n\n        <div class=\"card\">\n          <div style=\"display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem\">\n            <div>\n              <div style=\"font-size:.82rem;font-weight:800;color:var(--ink)\">التحدي شغال ✅</div>\n              <div id=\"streakSyncLine\" style=\"font-size:.72rem;color:var(--ink3);margin-top:.2rem\">صاحبك يشوف بس إنك ذاكرت ولا لأ — من غير أي تفاصيل تانية</div>\n            </div>\n            <div style=\"display:flex;gap:.5rem;flex-wrap:wrap\">\n              <button class=\"btn-sm\" onclick=\"refreshFriendStreak()\">🔄 تحديث</button>\n              <button class=\"btn-sm\" onclick=\"leaveFriendStreak()\" style=\"border-color:var(--red);color:var(--red)\">🚪 إنهاء التحدي</button>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n";
 function postCards(items,u){return items.map(post=>{
  const mine=post.authorUid===u.uid,member=post.participants?.[u.uid];
  return `<article class="card" style="padding:1rem;margin:1rem 0;overflow-wrap:anywhere"><h3>${esc(post.title||post.name)}</h3><p>بواسطة ${esc(post.authorName)}</p>${post.type==='note'?`<p style="white-space:pre-wrap">${esc(post.content)}</p><button class="btn-sm" data-action="like" data-id="${esc(post.id)}">إعجاب (${esc(post.likes)})</button>`:post.type==='deck'?`<p>${post.cards.length} بطاقة</p><details><summary>عرض البطاقات</summary>${post.cards.map(c=>`<p><b>${esc(c.q)}</b><br>${esc(c.a)}</p>`).join('')}</details><label>التقييم <select id="rate-${esc(post.id)}" aria-label="تقييم البطاقات"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label><button class="btn-sm" data-action="rate" data-id="${esc(post.id)}">حفظ التقييم</button>`:`<p>الهدف: ${esc(post.goal)}</p><p>الأعضاء (${Object.keys(post.participants||{}).length}): ${Object.values(post.participants||{}).map(m=>esc(m.name)+(m.status==='done'?' ✅':'')).join('، ')}</p>${member?`<button class="btn-sm" data-action="roomFinish" data-id="${esc(post.id)}">خلصت مذاكرة (بدون نقاط إضافية)</button> <button class="btn-sm" data-action="leave" data-id="${esc(post.id)}">خروج من الغرفة</button>`:`<button class="btn-primary" data-action="join" data-id="${esc(post.id)}">دخول الغرفة</button>`}<div>${(post.messages||[]).map(m=>`<p><b>${esc(m.author)}:</b> ${esc(m.text)}</p>`).join('')}</div>${member?`<input id="msg-${esc(post.id)}" class="input-field" maxlength="500" placeholder="رسالة للغرفة" aria-label="رسالة الغرفة"><button class="btn-sm" data-action="message" data-id="${esc(post.id)}">إرسال للغرفة</button>`:''}`}
@@ -6723,13 +6742,14 @@ function postCards(items,u){return items.map(post=>{
  }).join('');}
 function switchTab(tab,btn){
  currentTab=tab;document.querySelectorAll('#page-community .filter-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
- ['leaderboard','decks','notes','rooms'].forEach(t=>{if(el('comm-'+t))el('comm-'+t).style.display=t===tab?'block':'none';});
+ ['leaderboard','decks','notes','rooms','streak'].forEach(t=>{if(el('comm-'+t))el('comm-'+t).style.display=t===tab?'block':'none';});
+ if(tab==='streak'&&typeof initFriendStreakTab==='function')initFriendStreakTab();
 }
 function draw(){
  const root=el('page-community');if(!root)return;const u=current();
  root.innerHTML=CLASSIC_TEMPLATE;
  const nested=root.querySelector('#page-community');if(nested)root.innerHTML=nested.innerHTML;
- root.querySelectorAll('.filter-tab').forEach((b,i)=>{b.dataset.tab=['leaderboard','decks','notes','rooms'][i];b.removeAttribute('onclick');b.onclick=()=>switchTab(b.dataset.tab,b);});
+ root.querySelectorAll('.filter-tab').forEach((b,i)=>{b.dataset.tab=['leaderboard','decks','notes','rooms','streak'][i];b.removeAttribute('onclick');b.onclick=()=>switchTab(b.dataset.tab,b);});
  if(!u||u.isAnonymous){root.querySelectorAll('[id^="comm-"]').forEach(n=>n.style.display='none');el('comm-leaderboard').style.display='block';el('comm-leaderboard').innerHTML='<div class="card"><p>سجّل بحساب غير زائر للمشاركة. بياناتك ونجومك الشخصية زي ما هي.</p></div>';return;}
  const me=cache.me,p=me?.profile;
  el('serverControls').innerHTML=`<div class="card" style="margin-bottom:1rem"><details><summary style="cursor:pointer;font-weight:700;color:var(--green)">⚙️ اسمك والظهور في لوحة الشرف</summary><div style="margin-top:.8rem"><input class="input-field" id="serverName" maxlength="60" aria-label="اسم المجتمع" value="${esc(p?.name||localStorage.getItem('userName')||'')}"><label style="display:block;margin:.75rem 0"><input id="serverListed" type="checkbox" ${p?.listed?'checked':''}> أظهر اسمي ونقاطي وحالة المذاكرة في الترتيب</label><button class="btn-primary" data-action="profile">حفظ اسم المجتمع</button><p style="font-size:.78rem;color:var(--ink3)">اسمك يظهر مع أي منشور أو تعليق تنشره حتى لو الترتيب مقفول.</p></div></details></div><div class="card" style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap"><div><div style="font-weight:700;color:var(--green)">🍅 جلسة المنافسة · ${esc(me?.stars||0)} ⭐</div><div style="font-size:.78rem;color:var(--ink3);margin-top:.3rem">+10 بعد 25 دقيقة، حتى 80 يومياً UTC. بدون نقاط للنشر أو الضغط.</div></div><div>${me?.active?'<button class="btn-primary" data-action="finish">إنهاء الجلسة وطلب النقاط</button> <button class="btn-sm" data-action="cancel">إلغاء</button>':'<button class="btn-primary" data-action="start">ابدأ جلسة 25 دقيقة</button>'}</div><div style="font-size:.75rem;color:var(--ink3);width:100%">جلسة منفصلة عن المؤقت الشخصي، تنتهي بدون نقاط بعد ساعتين. الزمن ليس إثباتاً للمذاكرة. النجوم القديمة لم تتغير.</div></div>`;
@@ -7390,6 +7410,396 @@ function shareShareCard() {
       await navigator.share({ files: [f], title: 'إنجازي على مُنَظَّمْ' });
     } catch(e) { /* user cancelled */ }
   }, 'image/png');
+}
+</script>
+<script>
+/* ─── PARENTS WEEKLY REPORT ─── */
+function prCompute() {
+  const stats = getWeekStats();
+  const now = new Date();
+  const weekStart = stats.weekStart;
+  const thisWeekTasks = tasks.filter(t => new Date(t.created || t.id) >= weekStart);
+  const rate = thisWeekTasks.length ? Math.round(thisWeekTasks.filter(t => t.done).length / thisWeekTasks.length * 100) : 0;
+  const today = localDateKey();
+  const upcoming = (Array.isArray(exams) ? exams : [])
+    .filter(e => e && e.date && e.date >= today)
+    .sort((a, b) => a.date < b.date ? -1 : 1)
+    .slice(0, 3);
+  const grades = (Array.isArray(gradeItems) ? gradeItems : []).slice(-3).reverse();
+  return { stats, rate, hasWeekTasks: thisWeekTasks.length > 0, upcoming, grades };
+}
+
+function parentsReportTextStr() {
+  const { stats, rate, hasWeekTasks, upcoming, grades } = prCompute();
+  const name = (localStorage.getItem('userName') || 'الطالب').trim();
+  const fmt = d => d.getDate() + '/' + (d.getMonth() + 1);
+  const hrs = Math.floor(stats.focusMin / 60), mins = stats.focusMin % 60;
+  const timeStr = hrs > 0 ? hrs + ' ساعة' + (mins ? ' و ' + mins + ' دقيقة' : '') : mins + ' دقيقة';
+  let t = '📋 تقرير مذاكرة الأسبوع - من تطبيق مُنَظَّمْ\n';
+  t += 'الطالب: ' + name + '\n';
+  t += 'الأسبوع: من ' + fmt(stats.weekStart) + ' لـ ' + fmt(stats.weekEnd) + '\n\n';
+  t += '🕐 وقت التركيز: ' + timeStr + '\n';
+  t += '🍅 جلسات التركيز: ' + stats.sessions + '\n';
+  t += '🔥 أيام متتالية في المذاكرة: ' + stats.streak + '\n';
+  t += '✅ مهام منجزة: ' + stats.doneTasks + (hasWeekTasks ? ' (نسبة الإنجاز ' + rate + '%)' : '') + '\n';
+  if(upcoming.length) t += '\n📅 امتحانات قادمة:\n' + upcoming.map(e => '• ' + e.name + ' (' + e.date.split('-').reverse().slice(0,2).join('/') + ')').join('\n') + '\n';
+  if(grades.length) t += '\n🎓 آخر الدرجات:\n' + grades.map(g => '• ' + g.name + ': ' + g.score + '/' + g.max).join('\n') + '\n';
+  t += '\n— monazzam.site';
+  return t;
+}
+
+async function buildParentsReport() {
+  const wrap = document.getElementById('parentsReportWrap');
+  if(!wrap) return;
+  wrap.style.display = 'block';
+  try {
+    await document.fonts.load('900 100px Cairo');
+    await document.fonts.load('700 60px Tajawal');
+    await document.fonts.ready;
+  } catch(e) {}
+  const { stats, rate, upcoming, grades } = prCompute();
+  const name = (localStorage.getItem('userName') || 'الطالب').trim();
+  const canvas = document.getElementById('parentsReportCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1400;
+  const css = getComputedStyle(document.documentElement);
+  const green = (css.getPropertyValue('--green') || '#4a7c59').trim() || '#4a7c59';
+  const amber = (css.getPropertyValue('--amber') || '#c47c2b').trim() || '#c47c2b';
+
+  ctx.fillStyle = '#fdfbf5';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = green;
+  ctx.fillRect(0, 0, W, 210);
+  ctx.textAlign = 'center';
+  ctx.direction = 'rtl';
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.font = '900 62px Cairo, Tajawal, sans-serif';
+  ctx.fillText('📋 تقرير المذاكرة الأسبوعي', W / 2, 105);
+  ctx.font = '600 38px Tajawal, Cairo, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  const fmt = d => d.getDate() + '/' + (d.getMonth() + 1);
+  ctx.fillText('تقرير خاص بولي الأمر • من ' + fmt(stats.weekStart) + ' لـ ' + fmt(stats.weekEnd), W / 2, 165);
+
+  ctx.fillStyle = '#1f2937';
+  ctx.font = '800 66px Cairo, Tajawal, sans-serif';
+  ctx.fillText('الطالب: ' + name, W / 2, 320);
+
+  const hrs = Math.floor(stats.focusMin / 60), mins = stats.focusMin % 60;
+  const tiles = [
+    { icon: '🕐', val: hrs > 0 ? hrs + ' س' + (mins ? ' ' + mins + ' د' : '') : mins + ' د', lbl: 'وقت التركيز' },
+    { icon: '🍅', val: String(stats.sessions), lbl: 'جلسة تركيز' },
+    { icon: '🔥', val: String(stats.streak), lbl: 'يوم متتالي' },
+    { icon: '✅', val: String(stats.doneTasks), lbl: 'مهمة منجزة' + (rate ? ' (' + rate + '%)' : '') }
+  ];
+  const tw = 480, th = 190, gap = 40;
+  tiles.forEach((t, i) => {
+    const x = (W - (tw * 2 + gap)) / 2 + (i % 2) * (tw + gap);
+    const y = 380 + Math.floor(i / 2) * (th + gap);
+    ctx.fillStyle = '#ffffff';
+    scRoundRect(ctx, x, y, tw, th, 28); ctx.fill();
+    ctx.strokeStyle = '#e5e1d5'; ctx.lineWidth = 3;
+    scRoundRect(ctx, x, y, tw, th, 28); ctx.stroke();
+    ctx.font = '44px Tajawal, sans-serif';
+    ctx.fillStyle = '#1f2937';
+    ctx.fillText(t.icon, x + tw / 2, y + 62);
+    ctx.font = '900 58px Cairo, sans-serif';
+    ctx.fillStyle = green;
+    ctx.fillText(t.val, x + tw / 2, y + 128);
+    ctx.font = '600 30px Tajawal, sans-serif';
+    ctx.fillStyle = '#6b7280';
+    ctx.fillText(t.lbl, x + tw / 2, y + 168);
+  });
+
+  let y = 880;
+  ctx.textAlign = 'right';
+  const rx = W - 80;
+  ctx.font = '800 44px Cairo, Tajawal, sans-serif';
+  ctx.fillStyle = amber;
+  ctx.fillText('📅 امتحانات قادمة', rx, y); y += 62;
+  ctx.font = '600 36px Tajawal, sans-serif';
+  ctx.fillStyle = '#1f2937';
+  if(upcoming.length) {
+    upcoming.forEach(e => {
+      const dm = e.date.split('-');
+      ctx.fillText('•  ' + e.name + '  (' + dm[2] + '/' + dm[1] + ')', rx, y); y += 52;
+    });
+  } else { ctx.fillText('•  مفيش امتحانات مسجلة قريب', rx, y); y += 52; }
+  y += 30;
+  ctx.font = '800 44px Cairo, Tajawal, sans-serif';
+  ctx.fillStyle = amber;
+  ctx.fillText('🎓 آخر الدرجات', rx, y); y += 62;
+  ctx.font = '600 36px Tajawal, sans-serif';
+  ctx.fillStyle = '#1f2937';
+  if(grades.length) {
+    grades.forEach(g => { ctx.fillText('•  ' + g.name + ': ' + g.score + '/' + g.max, rx, y); y += 52; });
+  } else { ctx.fillText('•  لسه مفيش درجات مسجلة', rx, y); y += 52; }
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = green;
+  scRoundRect(ctx, W / 2 - 300, 1250, 600, 90, 45); ctx.fill();
+  ctx.font = '800 40px Tajawal, Cairo, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('مُنَظَّمْ  monazzam.site', W / 2, 1310);
+
+  const txt = parentsReportTextStr();
+  const tEl = document.getElementById('parentsReportText');
+  if(tEl) tEl.textContent = txt;
+
+  const shareBtn = document.getElementById('parentsReportShareBtn');
+  if(shareBtn) {
+    try {
+      canvas.toBlob(b => {
+        if(!b) { shareBtn.style.display = 'none'; return; }
+        const f = new File([b], 'monazzam-parents-report.png', { type: 'image/png' });
+        shareBtn.style.display = (navigator.canShare && navigator.canShare({ files: [f] })) ? 'inline-block' : 'none';
+      });
+    } catch(e) { shareBtn.style.display = 'none'; }
+  }
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function downloadParentsReport() {
+  const canvas = document.getElementById('parentsReportCanvas');
+  if(!canvas) return;
+  const a = document.createElement('a');
+  a.download = 'monazzam-parents-report-' + localDateKey() + '.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+  showToast('⬇️ صورة التقرير نزلت، ابعتها لأهلك');
+}
+
+function copyParentsReportText() {
+  const txt = (document.getElementById('parentsReportText') || {}).textContent || parentsReportTextStr();
+  const done = () => showToast('📄 نص التقرير اتنسخ، الصقه في واتساب');
+  if(navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done).catch(() => {
+      const t = document.getElementById('parentsReportText');
+      if(t) { t.style.display = 'block'; showToast('انسخ النص الظاهر تحت الصورة'); }
+    });
+  } else {
+    const t = document.getElementById('parentsReportText');
+    if(t) { t.style.display = 'block'; showToast('انسخ النص الظاهر تحت الصورة'); }
+  }
+}
+
+function shareParentsReport() {
+  const canvas = document.getElementById('parentsReportCanvas');
+  if(!canvas) return;
+  canvas.toBlob(async b => {
+    if(!b) return;
+    const f = new File([b], 'monazzam-parents-report.png', { type: 'image/png' });
+    try {
+      await navigator.share({ files: [f], title: 'تقرير المذاكرة الأسبوعي' });
+    } catch(e) { /* user cancelled */ }
+  }, 'image/png');
+}
+</script>
+<script>
+/* ─── SHARED FRIEND STREAK (safe pairs via monazzamServer) ─── */
+const FS_CACHE_KEY = 'friendStreakCache';
+const FS_MIN_MINUTES = 25;
+
+function fsCacheGet() {
+  try { return JSON.parse(localStorage.getItem(FS_CACHE_KEY) || 'null'); } catch(e) { return null; }
+}
+function fsCacheSet(c) {
+  if(c) localStorage.setItem(FS_CACHE_KEY, JSON.stringify(c));
+  else localStorage.removeItem(FS_CACHE_KEY);
+}
+function fsSignedIn() {
+  return !!(window.currentUser && !window.currentUser.isAnonymous && window.monazzamServer);
+}
+function fsErrText(e) {
+  const m = (e && e.message) || '';
+  const map = {
+    streak_already_paired: 'أنت بالفعل في تحدي، أنهيه الأول لو عايز تبدأ واحد جديد',
+    streak_friend_busy: 'صاحبك دخل تحدي مع حد تاني، خليه ينهيه الأول',
+    streak_own_code: 'ده كودك أنت 😄 ابعته لصاحبك وهو اللي يدخله',
+    streak_not_found: 'الكود ده مش موجود أو انتهت صلاحيته، تأكد منه مع صاحبك',
+    streak_invalid_code: 'الكود 6 حروف/أرقام زي ما وصلك بالظبط',
+    streak_no_pair: 'مفيش تحدي شغال حالياً'
+  };
+  for(const k in map) if(m.includes(k)) return map[k];
+  return m && !/^تعذر/.test(m) ? m : 'حصل خطأ، تأكد من النت وجرّب تاني';
+}
+async function fsApi(path, body) {
+  try {
+    return await window.monazzamServer.api(path, body || undefined);
+  } catch(e) {
+    throw new Error(fsErrText(e));
+  }
+}
+function fsMyTodayMin() {
+  return parseInt(localStorage.getItem('focusMin_' + localDateKey()) || '0', 10);
+}
+function fsStudied(pair, uid, dayKey) {
+  const d = pair.days && pair.days[uid] && pair.days[uid][dayKey];
+  return !!(d && d.s);
+}
+function fsMinutes(pair, uid, dayKey) {
+  const d = pair.days && pair.days[uid] && pair.days[uid][dayKey];
+  return d && typeof d.m === 'number' ? d.m : null;
+}
+function fsFriend(pair, me) {
+  const m = (pair.members || []).find(x => x.uid !== me);
+  return m || { uid: '', name: 'صديقك' };
+}
+function fsComputeShared(pair, meUid) {
+  const friend = fsFriend(pair, meUid);
+  let streak = 0;
+  const d = new Date();
+  d.setDate(d.getDate() - 1); // today is in progress: never counted, never breaks the chain
+  for(let i = 0; i < 365; i++) {
+    const k = localDateKey(d);
+    if(fsStudied(pair, meUid, k) && fsStudied(pair, friend.uid, k)) streak++;
+    else break;
+    d.setDate(d.getDate() - 1);
+  }
+  return streak;
+}
+
+async function fsLoad(silent) {
+  if(!fsSignedIn()) { renderFriendStreak(); return; }
+  try {
+    const data = await fsApi('/streak');
+    fsCacheSet(data);
+  } catch(e) {
+    if(!silent) showToast(e.message);
+  }
+  renderFriendStreak();
+}
+
+async function fsCheckinThenLoad() {
+  if(!fsSignedIn()) { renderFriendStreak(); return; }
+  const c = fsCacheGet();
+  if(c && c.pair) {
+    try { await fsApi('/streak/checkin', { day: localDateKey(), minutes: fsMyTodayMin() }); } catch(e) {}
+  }
+  fsLoad(true);
+}
+
+async function createFriendInvite() {
+  if(!fsSignedIn()) return showToast('سجّل بحساب عشان تعمل تحدي مع صاحبك؛ بيانات الزائر بتفضل على الجهاز.');
+  try {
+    const name = localStorage.getItem('userName') || 'طالب';
+    await fsApi('/streak/invite', { name: name });
+    await fsLoad(true);
+    showToast('🔥 كود الدعوة جاهز، ابعته لصاحبك');
+  } catch(e) { showToast(e.message); }
+}
+
+async function acceptFriendInvite() {
+  if(!fsSignedIn()) return showToast('سجّل بحساب عشان تدخل تحدي مع صاحبك؛ بيانات الزائر بتفضل على الجهاز.');
+  const inp = document.getElementById('streakJoinCode');
+  const code = (inp && inp.value || '').trim().toUpperCase();
+  if(code.length !== 6) return showToast('الكود 6 حروف/أرقام زي ما وصلك بالظبط');
+  try {
+    const name = localStorage.getItem('userName') || 'طالب';
+    await fsApi('/streak/accept', { code: code, name: name });
+    addStars(5);
+    await fsCheckinThenLoad();
+    showToast('🤝 التحدي بدأ! كل يوم تذاكروا الاتنين السلسلة بتكبر');
+  } catch(e) { showToast(e.message); }
+}
+
+async function leaveFriendStreak(isInvite) {
+  const c = fsCacheGet();
+  if(!c || (!c.pair && !c.invite)) return;
+  const msg = isInvite ? 'تلغي الدعوة؟ الكود مش هيبقى شغال.' : 'متأكد إنك عايز تنهي التحدي؟ السلسلة هتتصفر عندك وعند صاحبك.';
+  if(!confirm(msg)) return;
+  try { await fsApi('/streak/leave', {}); } catch(e) {}
+  fsCacheSet(null);
+  renderFriendStreak();
+  showToast(isInvite ? 'الدعوة اتلغت' : 'التحدي انتهى');
+}
+
+function refreshFriendStreak() {
+  fsCheckinThenLoad();
+  showToast('🔄 جاري التحديث...');
+}
+
+function renderFriendStreak() {
+  const setup = document.getElementById('streakSetup');
+  const pending = document.getElementById('streakPending');
+  const active = document.getElementById('streakActive');
+  if(!setup || !pending || !active) return;
+  const c = fsCacheGet();
+  setup.style.display = 'none'; pending.style.display = 'none'; active.style.display = 'none';
+
+  if(c && c.pair) {
+    active.style.display = 'block';
+    const pair = c.pair;
+    const me = c.me;
+    const friend = fsFriend(pair, me);
+    const today = localDateKey();
+    const streak = fsComputeShared(pair, me);
+    document.getElementById('streakBigNum').textContent = streak;
+
+    const myToday = fsStudied(pair, me, today);
+    const frToday = fsStudied(pair, friend.uid, today);
+    let line;
+    if(myToday && frToday) line = '✅ كل الأبطال ذاكروا النهارده! سلسلة بكره مضمونة 🔥';
+    else {
+      const waiting = [];
+      if(!myToday) waiting.push('أنت');
+      if(!frToday) waiting.push(friend.name);
+      line = '⏳ مستنيين النهارده: ' + waiting.join('، ');
+    }
+    document.getElementById('streakTodayLine').textContent = line;
+
+    const dots = [];
+    for(let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const k = localDateKey(d);
+      const dayName = PLAN_DAY_NAMES[d.getDay()];
+      const both = fsStudied(pair, me, k) && fsStudied(pair, friend.uid, k);
+      let bg, icon, color;
+      if(both) { bg = 'var(--green)'; icon = '✓'; color = '#fff'; }
+      else if(k === today) { bg = 'var(--amber)'; icon = '…'; color = '#fff'; }
+      else { bg = 'var(--surface2)'; icon = '✗'; color = 'var(--ink3)'; }
+      dots.push('<div style="text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:' + bg + ';color:' + color + ';display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;border:1px solid var(--border)">' + icon + '</div><div style="font-size:.62rem;color:var(--ink3);margin-top:.2rem">' + dayName + '</div></div>');
+    }
+    document.getElementById('streakWeekDots').innerHTML = dots.join('');
+
+    const myName = (localStorage.getItem('userName') || 'أنت').trim();
+    const memberCard = (name, uid, isMe) => {
+      const ok = fsStudied(pair, uid, today);
+      const mins = c.shareMinutes ? fsMinutes(pair, uid, today) : null;
+      const initial = (name || 'ط').trim().charAt(0) || 'ط';
+      const sub = ok
+        ? '✅ ذاكر النهارده' + (mins !== null ? ' (' + mins + ' د)' : '')
+        : '⏳ لسه مذاكرش النهارده' + (mins !== null ? ' (' + mins + '/' + FS_MIN_MINUTES + ' د)' : '');
+      return '<div class="card" style="text-align:center;border:1.5px solid ' + (ok ? 'var(--green)' : 'var(--border)') + (isMe ? ';background:var(--green-light)' : '') + '">' +
+        '<div style="width:52px;height:52px;border-radius:50%;background:' + (ok ? 'var(--green)' : 'var(--blue-light)') + ';color:' + (ok ? '#fff' : 'var(--blue)') + ';display:flex;align-items:center;justify-content:center;font-family:Cairo,sans-serif;font-weight:900;font-size:1.3rem;margin:0 auto .5rem">' + escapeHTML(initial) + '</div>' +
+        '<div style="font-weight:800;font-size:.92rem;color:var(--ink)">' + escapeHTML(name) + (isMe ? ' (أنت)' : '') + '</div>' +
+        '<div style="font-size:.74rem;color:' + (ok ? 'var(--green)' : 'var(--amber)') + ';font-weight:700;margin-top:.2rem">' + sub + '</div>' +
+      '</div>';
+    };
+    document.getElementById('streakMembers').innerHTML = memberCard(myName, me, true) + memberCard(friend.name, friend.uid, false);
+    return;
+  }
+
+  if(c && c.invite && c.invite.code) {
+    pending.style.display = 'block';
+    document.getElementById('streakPendingCode').textContent = c.invite.code;
+    return;
+  }
+
+  setup.style.display = 'block';
+}
+
+function initFriendStreakTab() {
+  renderFriendStreak();
+  fsCheckinThenLoad();
+}
+
+function copyStreakCode() {
+  const c = fsCacheGet();
+  const code = c && c.invite && c.invite.code;
+  if(!code) return showToast('اعمل كود دعوة الأول');
+  const done = () => showToast('📋 الكود اتنسخ، ابعته لصاحبك');
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done).catch(() => showToast('الكود: ' + code));
+  else showToast('الكود: ' + code);
 }
 </script>
 
