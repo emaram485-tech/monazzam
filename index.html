@@ -1828,16 +1828,31 @@ function readStoredJSON(key, fallback) {
       <div id="lessonsPlayerBox" style="position:relative;width:100%;aspect-ratio:16/9;background:var(--surface2);border-radius:12px;overflow:hidden"></div>
       <div style="font-size:.75rem;color:var(--ink3);margin-top:.5rem">القايمة جوّه المشغّل فيها كل فيديوهات القناة، وأي فيديو جديد بيظهر لوحده.</div>
     </div>
-    <div class="section-head" style="margin-bottom:.75rem"><h2 class="section-title">👩‍🏫 مدرسين تانيين</h2></div>
-    <div id="lessonsSubjects" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem"></div>
+    <div class="section-head" style="margin-bottom:.75rem"><h2 class="section-title">👩‍🏫 ابحث عن مدرسك</h2></div>
+    <div class="card" style="margin-bottom:1rem">
+      <form id="lessonsSearchForm" style="display:flex;gap:.5rem;flex-wrap:wrap" onsubmit="lessonsSearch();return false">
+        <input id="lessonsQ" type="search" placeholder="اسم المدرس أو المادة، مثال: كيمياء تالتة ثانوي" style="flex:1;min-width:180px;padding:.65rem .8rem;border:1px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--ink);font-family:inherit;font-size:.95rem">
+        <button type="submit" class="btn-sm" style="cursor:pointer;background:var(--green);color:#fff">🔍 بحث</button>
+      </form>
+      <div id="lessonsStages" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem"></div>
+      <div id="lessonsSubjects" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem"></div>
+      <div style="font-size:.72rem;color:var(--ink3);margin-top:.55rem">البحث بيدوّر في يوتيوب كله على قنوات المدرسين، فمش لازم المدرس يكون في القايمة اللي تحت.</div>
+    </div>
+    <div id="lessonsStatus" style="font-size:.85rem;color:var(--ink3);margin-bottom:.6rem"></div>
+    <div id="lessonsResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin-bottom:1rem"></div>
+    <div class="section-head" style="margin:1rem 0 .6rem"><h2 class="section-title">⭐ مدرسين مختارين</h2></div>
     <div id="lessonsTeachers" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-bottom:1rem"></div>
     <div class="card" id="lessonsTeacherPanel" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:.75rem">
         <div id="lessonsTeacherTitle" style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;color:var(--ink)"></div>
-        <a class="btn-sm" id="lessonsTeacherOpen" href="#" target="_blank" rel="noopener" style="text-decoration:none">افتح على يوتيوب ↗</a>
+        <a class="btn-sm" id="lessonsTeacherOpen" href="#" target="_blank" rel="noopener" style="text-decoration:none">افتح القناة على يوتيوب ↗</a>
       </div>
       <div id="lessonsTeacherPlayer" style="position:relative;width:100%;aspect-ratio:16/9;background:var(--surface2);border-radius:12px;overflow:hidden"></div>
-      <div style="font-size:.75rem;color:var(--ink3);margin-top:.5rem">لو الفيديو مش بيشتغل جوّه الموقع، اضغط "افتح على يوتيوب".</div>
+      <div id="lessonsNowTitle" style="font-weight:800;color:var(--ink);margin-top:.6rem;font-size:.95rem"></div>
+      <div style="font-size:.75rem;color:var(--ink3);margin-top:.3rem">لو الفيديو مش بيشتغل جوّه الموقع، اضغط "افتح القناة على يوتيوب".</div>
+      <div class="section-head" style="margin:1rem 0 .6rem"><h2 class="section-title">📺 كل فيديوهات القناة</h2></div>
+      <div id="lessonsVideos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.7rem"></div>
+      <div style="text-align:center;margin-top:.8rem"><button type="button" id="lessonsMore" class="btn-sm" style="cursor:pointer;display:none" onclick="lessonsLoadMore()">⬇️ فيديوهات أكتر</button></div>
     </div>
   </div>
 
@@ -2732,22 +2747,84 @@ const LESSONS_TEACHERS=[
  {s:'فيزياء',name:'تامر القاضي',id:'UCv3YKSjAzBV7fEAWjj3i2zw'},
  {s:'أحياء',name:'د. أحمد الجوهري',id:'UCN6hQCg6tIs5x6CoYLwXlhQ'}
 ];
-let lessonsSubject='الكل',lessonsTeacherId=null;
-function lessonsEsc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function lessonsDrawTeachers(){
- const subs=['الكل'].concat([...new Set(LESSONS_TEACHERS.map(x=>x.s))]);
- document.getElementById('lessonsSubjects').innerHTML=subs.map(x=>'<button type="button" class="btn-sm" data-sub="'+lessonsEsc(x)+'" style="cursor:pointer;'+(x===lessonsSubject?'background:var(--green);color:#fff;':'')+'">'+lessonsEsc(x)+'</button>').join('');
- document.getElementById('lessonsTeachers').innerHTML=LESSONS_TEACHERS.filter(x=>lessonsSubject==='الكل'||x.s===lessonsSubject).map(x=>'<button type="button" class="card" data-tid="'+x.id+'" style="cursor:pointer;text-align:right;display:block;width:100%;font-family:inherit;'+(x.id===lessonsTeacherId?'border:2px solid var(--green);':'')+'"><div style="font-weight:800;color:var(--ink)">▶️ '+lessonsEsc(x.name)+'</div><div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">'+lessonsEsc(x.s)+'</div></button>').join('');
+const LESSONS_API='https://monazzam-yt.monazzam976.workers.dev';
+const LESSONS_STAGES=[['','الكل'],['إعدادي','🟢 إعدادي'],['ثانوي عام','🔵 ثانوي']];
+const LESSONS_SUBJECTS=['عربي','إنجليزي','رياضيات','علوم','دراسات اجتماعية','تاريخ','جغرافيا','فيزياء','كيمياء','أحياء','جيولوجيا','فلسفة ومنطق','فرنسي','ألماني','حاسب آلي'];
+let lessonsSubject='الكل',lessonsStage='',lessonsTeacherId=null,lessonsNext=null,lessonsBusy=false,lessonsPlaying='';
+function lessonsEsc(x){return String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function lessonsChip(on){return 'cursor:pointer;'+(on?'background:var(--green);color:#fff;':'');}
+function lessonsDrawChips(){
+ document.getElementById('lessonsStages').innerHTML=LESSONS_STAGES.map(x=>'<button type="button" class="btn-sm" data-stage="'+lessonsEsc(x[0])+'" style="'+lessonsChip(x[0]===lessonsStage)+'">'+lessonsEsc(x[1])+'</button>').join('');
+ document.getElementById('lessonsSubjects').innerHTML=LESSONS_SUBJECTS.map(x=>'<button type="button" class="btn-sm" data-sub="'+lessonsEsc(x)+'" style="'+lessonsChip(x===lessonsSubject)+'">'+lessonsEsc(x)+'</button>').join('');
 }
-function lessonsSelect(id){
- const x=LESSONS_TEACHERS.find(t=>t.id===id);if(!x)return;
- lessonsTeacherId=id;
- document.getElementById('lessonsTeacherPanel').style.display='block';
- document.getElementById('lessonsTeacherTitle').textContent=x.name+' - '+x.s;
+function lessonsDrawTeachers(){
+ document.getElementById('lessonsTeachers').innerHTML=LESSONS_TEACHERS.map(x=>'<button type="button" class="card" data-tid="'+x.id+'" style="cursor:pointer;text-align:right;display:block;width:100%;font-family:inherit;'+(x.id===lessonsTeacherId?'border:2px solid var(--green);':'')+'"><div style="font-weight:800;color:var(--ink)">▶️ '+lessonsEsc(x.name)+'</div><div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">'+lessonsEsc(x.s)+'</div></button>').join('');
+}
+async function lessonsApi(path){
+ const r=await fetch(LESSONS_API+path);
+ if(!r.ok)throw new Error('http '+r.status);
+ const j=await r.json();if(j.error)throw new Error(j.error);return j;
+}
+async function lessonsSearch(){
+ const st=document.getElementById('lessonsStatus'),box=document.getElementById('lessonsResults');
+ let q=document.getElementById('lessonsQ').value.trim();
+ if(!q&&lessonsSubject==='الكل'){st.textContent='اكتب اسم مدرس أو مادة، أو اختار مادة من تحت.';return;}
+ if(!q)q='مدرس '+lessonsSubject;
+ else if(lessonsSubject!=='الكل'&&q.indexOf(lessonsSubject)<0)q+=' '+lessonsSubject;
+ if(lessonsStage)q+=' '+lessonsStage;
+ st.textContent='⏳ بدوّر...';box.innerHTML='';
+ try{
+  const j=await lessonsApi('/search?q='+encodeURIComponent(q));
+  if(!j.channels.length){st.textContent='ملقيتش نتايج، جرّب كلمات تانية.';return;}
+  st.textContent='لقيت '+j.channels.length+' قناة، دوس على أي واحدة تشوف كل فيديوهاتها.';
+  box.innerHTML=j.channels.map(c=>'<button type="button" class="card" data-cid="'+lessonsEsc(c.id)+'" data-cname="'+lessonsEsc(c.name)+'" style="cursor:pointer;text-align:right;display:flex;gap:.6rem;align-items:center;width:100%;font-family:inherit"><img src="'+lessonsEsc(c.img)+'" alt="" loading="lazy" referrerpolicy="no-referrer" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none;background:var(--surface2)"><span style="min-width:0"><span style="display:block;font-weight:800;color:var(--ink);font-size:.9rem">'+lessonsEsc(c.name)+'</span><span style="display:block;font-size:.72rem;color:var(--ink3);margin-top:.2rem">'+lessonsEsc(c.subs)+'</span></span></button>').join('');
+ }catch(e){st.textContent='البحث مش شغال دلوقتي، جرّب بعد شوية. تقدر تختار من المدرسين المختارين تحت.';}
+}
+function lessonsPlay(vid,title){
+ lessonsPlaying=vid;
+ document.getElementById('lessonsTeacherPlayer').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(vid)+'?rel=0" title="'+lessonsEsc(title||'فيديو')+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+ document.getElementById('lessonsNowTitle').textContent=title||'';
+}
+function lessonsDrawVideos(list,append){
+ const g=document.getElementById('lessonsVideos');
+ const h=list.map(v=>'<button type="button" data-vid="'+lessonsEsc(v.id)+'" data-vt="'+lessonsEsc(v.title)+'" style="cursor:pointer;text-align:right;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0;overflow:hidden;font-family:inherit;color:var(--ink)"><span style="display:block;position:relative;aspect-ratio:16/9;background:#000"><img src="https://i.ytimg.com/vi/'+lessonsEsc(v.id)+'/mqdefault.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"><span style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.8);color:#fff;font-size:.68rem;padding:1px 5px;border-radius:4px">'+lessonsEsc(v.dur)+'</span></span><span style="display:block;padding:.45rem .55rem"><span style="display:block;font-size:.8rem;font-weight:700;line-height:1.5;max-height:3em;overflow:hidden">'+lessonsEsc(v.title)+'</span><span style="display:block;font-size:.68rem;color:var(--ink3);margin-top:.2rem">'+lessonsEsc(v.meta)+'</span></span></button>').join('');
+ if(append)g.insertAdjacentHTML('beforeend',h);else g.innerHTML=h;
+}
+async function lessonsSelect(id,name){
+ const x=LESSONS_TEACHERS.find(t=>t.id===id);
+ lessonsTeacherId=id;lessonsNext=null;
+ const pn=document.getElementById('lessonsTeacherPanel');pn.style.display='block';
+ document.getElementById('lessonsTeacherTitle').textContent=(x?x.name:name||'');
  document.getElementById('lessonsTeacherOpen').href='https://www.youtube.com/channel/'+id;
- document.getElementById('lessonsTeacherPlayer').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+id.slice(2)+'" title="'+lessonsEsc(x.name)+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+ document.getElementById('lessonsVideos').innerHTML='<div style="color:var(--ink3);font-size:.85rem">⏳ بحمّل الفيديوهات...</div>';
+ document.getElementById('lessonsMore').style.display='none';
+ document.getElementById('lessonsNowTitle').textContent='';
+ document.getElementById('lessonsTeacherPlayer').innerHTML='';
  lessonsDrawTeachers();
- document.getElementById('lessonsTeacherPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+ pn.scrollIntoView({behavior:'smooth',block:'nearest'});
+ try{
+  const j=await lessonsApi('/videos?id='+encodeURIComponent(id));
+  if(lessonsTeacherId!==id)return;
+  if(!j.videos.length)throw new Error('empty');
+  lessonsDrawVideos(j.videos,false);lessonsNext=j.next;
+  document.getElementById('lessonsMore').style.display=j.next?'inline-block':'none';
+  lessonsPlay(j.videos[0].id,j.videos[0].title);
+ }catch(e){
+  document.getElementById('lessonsVideos').innerHTML='<div style="color:var(--ink3);font-size:.85rem">مقدرتش أحمّل قايمة الفيديوهات، بس المشغّل تحت فيه كل فيديوهات القناة.</div>';
+  document.getElementById('lessonsTeacherPlayer').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+id.slice(2)+'" title="'+lessonsEsc(name||'')+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+ }
+}
+async function lessonsLoadMore(){
+ if(lessonsBusy||!lessonsNext)return;lessonsBusy=true;
+ const id=lessonsTeacherId,btn=document.getElementById('lessonsMore');btn.textContent='⏳...';
+ try{
+  const j=await lessonsApi('/videos?t='+encodeURIComponent(lessonsNext));
+  if(lessonsTeacherId!==id)return;
+  const seen=new Set([...document.querySelectorAll('#lessonsVideos [data-vid]')].map(e=>e.dataset.vid));
+  lessonsDrawVideos(j.videos.filter(v=>!seen.has(v.id)),true);
+  lessonsNext=j.next;btn.style.display=j.next?'inline-block':'none';
+ }catch(e){}
+ btn.textContent='⬇️ فيديوهات أكتر';lessonsBusy=false;
 }
 function renderLessons(){
  const box=document.getElementById('lessonsPlayerBox');
@@ -2759,9 +2836,12 @@ function renderLessons(){
  const t=document.getElementById('lessonsTeachers');
  if(t&&!t.dataset.ready){
   t.dataset.ready='1';
-  lessonsDrawTeachers();
-  document.getElementById('lessonsSubjects').addEventListener('click',e=>{const b=e.target.closest('[data-sub]');if(b){lessonsSubject=b.dataset.sub;lessonsDrawTeachers();}});
+  lessonsDrawChips();lessonsDrawTeachers();
+  document.getElementById('lessonsSubjects').addEventListener('click',e=>{const b=e.target.closest('[data-sub]');if(b){lessonsSubject=(lessonsSubject===b.dataset.sub)?'الكل':b.dataset.sub;lessonsDrawChips();lessonsSearch();}});
+  document.getElementById('lessonsStages').addEventListener('click',e=>{const b=e.target.closest('[data-stage]');if(b){lessonsStage=b.dataset.stage;lessonsDrawChips();if(document.getElementById('lessonsQ').value.trim()||lessonsSubject!=='الكل')lessonsSearch();}});
   t.addEventListener('click',e=>{const b=e.target.closest('[data-tid]');if(b)lessonsSelect(b.dataset.tid);});
+  document.getElementById('lessonsResults').addEventListener('click',e=>{const b=e.target.closest('[data-cid]');if(b)lessonsSelect(b.dataset.cid,b.dataset.cname);});
+  document.getElementById('lessonsVideos').addEventListener('click',e=>{const b=e.target.closest('[data-vid]');if(b){lessonsPlay(b.dataset.vid,b.dataset.vt);document.getElementById('lessonsTeacherPlayer').scrollIntoView({behavior:'smooth',block:'nearest'});}});
  }
 }
 function goPage(name, btn) {
