@@ -1441,6 +1441,9 @@ function readStoredJSON(key, fallback) {
   <button class="nav-item" onclick="goPage('store',this)">
     <span class="nav-icon">🛍️</span> متجر النجوم
   </button>
+  <button class="nav-item" onclick="goPage('lessons',this)">
+    <span class="nav-icon">🎓</span> دروس يوتيوب
+  </button>
   <button class="nav-item" onclick="goPage('community',this)">
     <span class="nav-icon">🏆</span> المجتمع والمتصدرين
   </button>
@@ -1812,6 +1815,32 @@ function readStoredJSON(key, fallback) {
   </div>
 
   <!-- ══ WEEKLY REPORT ══ -->
+  <div class="page" id="page-lessons">
+    <div class="page-header">
+      <h1 class="page-title">🎓 دروس يوتيوب</h1>
+      <p class="page-sub">شروحات ومراجعات من مدرّسين، الفيديوهات بتتشغل من يوتيوب مباشرة</p>
+    </div>
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:.75rem">
+        <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;color:var(--green)">⭐ قناة مصطفى عمارة (أحدث فيديو أولاً)</div>
+        <a class="btn-sm" href="https://www.youtube.com/@mogaming212" target="_blank" rel="noopener" style="text-decoration:none">فتح القناة على يوتيوب ↗</a>
+      </div>
+      <div id="lessonsPlayerBox" style="position:relative;width:100%;aspect-ratio:16/9;background:var(--surface2);border-radius:12px;overflow:hidden"></div>
+      <div style="font-size:.75rem;color:var(--ink3);margin-top:.5rem">القايمة جوّه المشغّل فيها كل فيديوهات القناة، وأي فيديو جديد بيظهر لوحده.</div>
+    </div>
+    <div class="section-head" style="margin-bottom:.75rem"><h2 class="section-title">👩‍🏫 مدرسين تانيين</h2></div>
+    <div id="lessonsSubjects" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem"></div>
+    <div id="lessonsTeachers" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-bottom:1rem"></div>
+    <div class="card" id="lessonsTeacherPanel" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:.75rem">
+        <div id="lessonsTeacherTitle" style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;color:var(--ink)"></div>
+        <a class="btn-sm" id="lessonsTeacherOpen" href="#" target="_blank" rel="noopener" style="text-decoration:none">افتح على يوتيوب ↗</a>
+      </div>
+      <div id="lessonsTeacherPlayer" style="position:relative;width:100%;aspect-ratio:16/9;background:var(--surface2);border-radius:12px;overflow:hidden"></div>
+      <div style="font-size:.75rem;color:var(--ink3);margin-top:.5rem">لو الفيديو مش بيشتغل جوّه الموقع، اضغط "افتح على يوتيوب".</div>
+    </div>
+  </div>
+
   <div class="page" id="page-report">
     <div class="page-header">
       <h1 class="page-title">📋 <span class="t" data-ar="التقرير الأسبوعي" data-en="Weekly Report">التقرير الأسبوعي</span></h1>
@@ -2691,6 +2720,50 @@ function updateDate() {
 }
 
 // ─── NAVIGATION ─────────────────────────────────────
+
+const LESSONS_CHANNEL_ID='UCoORzBF8_FMab2W2Gk0h0xg';
+const LESSONS_TEACHERS=[
+ {s:'عربي',name:'محمد صلاح بسطتهالك',id:'UCdur25RCItdfoXA89ORWSkw'},
+ {s:'عربي',name:'رضا الفاروق',id:'UC7fHSfm6zxGJYC-P7RMzX7w'},
+ {s:'إنجليزي',name:'أحمد طارق عبقري لغة',id:'UCr8ww_CG194ATkyyyYFcIjQ'},
+ {s:'تاريخ',name:'محمد طلبة',id:'UCYFVIsAg_6E_0N2A_8Fsiow'},
+ {s:'كيمياء',name:'محمد عبد الجواد',id:'UC86Lxry5JBmZBjTtxcdBLDQ'},
+ {s:'فيزياء',name:'محمود مجدي',id:'UCJVp97ImKXvNpfcFYHHMwDQ'},
+ {s:'فيزياء',name:'تامر القاضي',id:'UCv3YKSjAzBV7fEAWjj3i2zw'},
+ {s:'أحياء',name:'د. أحمد الجوهري',id:'UCN6hQCg6tIs5x6CoYLwXlhQ'}
+];
+let lessonsSubject='الكل',lessonsTeacherId=null;
+function lessonsEsc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function lessonsDrawTeachers(){
+ const subs=['الكل'].concat([...new Set(LESSONS_TEACHERS.map(x=>x.s))]);
+ document.getElementById('lessonsSubjects').innerHTML=subs.map(x=>'<button type="button" class="btn-sm" data-sub="'+lessonsEsc(x)+'" style="cursor:pointer;'+(x===lessonsSubject?'background:var(--green);color:#fff;':'')+'">'+lessonsEsc(x)+'</button>').join('');
+ document.getElementById('lessonsTeachers').innerHTML=LESSONS_TEACHERS.filter(x=>lessonsSubject==='الكل'||x.s===lessonsSubject).map(x=>'<button type="button" class="card" data-tid="'+x.id+'" style="cursor:pointer;text-align:right;display:block;width:100%;font-family:inherit;'+(x.id===lessonsTeacherId?'border:2px solid var(--green);':'')+'"><div style="font-weight:800;color:var(--ink)">▶️ '+lessonsEsc(x.name)+'</div><div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">'+lessonsEsc(x.s)+'</div></button>').join('');
+}
+function lessonsSelect(id){
+ const x=LESSONS_TEACHERS.find(t=>t.id===id);if(!x)return;
+ lessonsTeacherId=id;
+ document.getElementById('lessonsTeacherPanel').style.display='block';
+ document.getElementById('lessonsTeacherTitle').textContent=x.name+' - '+x.s;
+ document.getElementById('lessonsTeacherOpen').href='https://www.youtube.com/channel/'+id;
+ document.getElementById('lessonsTeacherPlayer').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+id.slice(2)+'" title="'+lessonsEsc(x.name)+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+ lessonsDrawTeachers();
+ document.getElementById('lessonsTeacherPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function renderLessons(){
+ const box=document.getElementById('lessonsPlayerBox');
+ if(box&&!box.dataset.ready){
+  box.dataset.ready='1';
+  const uploads='UU'+LESSONS_CHANNEL_ID.slice(2);
+  box.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list='+uploads+'" title="دروس يوتيوب" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+ }
+ const t=document.getElementById('lessonsTeachers');
+ if(t&&!t.dataset.ready){
+  t.dataset.ready='1';
+  lessonsDrawTeachers();
+  document.getElementById('lessonsSubjects').addEventListener('click',e=>{const b=e.target.closest('[data-sub]');if(b){lessonsSubject=b.dataset.sub;lessonsDrawTeachers();}});
+  t.addEventListener('click',e=>{const b=e.target.closest('[data-tid]');if(b)lessonsSelect(b.dataset.tid);});
+ }
+}
 function goPage(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2703,6 +2776,7 @@ function goPage(name, btn) {
   if(name === 'analytics') renderAnalytics();
   if(name === 'projects') renderProjects();
   if(name === 'report') renderWeeklyReport();
+  if(name === 'lessons') renderLessons();
   if(name === 'plan') renderPlanPage();
   if(name === 'store') renderRewards();
   if(name === 'community') loadLeaderboard();
