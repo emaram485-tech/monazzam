@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منظّم</title>
+<title>مُنَظَّمْ</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#4a7c59">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="منظّم">
+<meta name="apple-mobile-web-app-title" content="مُنَظَّمْ">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Cairo:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -1339,7 +1339,7 @@ function readStoredJSON(key, fallback) {
 <div id="authLoading" role="status" aria-live="polite" style="position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:99999">
   <div style="text-align:center;color:var(--ink3);font-family:Tajawal,sans-serif">
     <div style="font-size:2.5rem;margin-bottom:.75rem">🗂️</div>
-    <div style="font-size:.95rem">بنجهّز منظّم...</div>
+    <div style="font-size:.95rem">بنجهّز مُنَظَّمْ...</div>
   </div>
 </div>
 
@@ -1348,7 +1348,7 @@ function readStoredJSON(key, fallback) {
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.5rem 2rem;max-width:380px;width:90%;box-shadow:var(--shadow-md)">
     <div style="text-align:center;margin-bottom:1.5rem">
       <div style="font-size:2.5rem">🗂️</div>
-      <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.8rem;color:var(--green)">منظّم</div>
+      <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.8rem;color:var(--green)">مُنَظَّمْ</div>
     </div>
     <div style="display:flex;background:var(--surface2);border-radius:12px;padding:3px;gap:3px;margin-bottom:1.5rem">
       <button id="tab-login" onclick="switchTab('login')" style="flex:1;padding:.5rem;border-radius:9px;border:none;font-family:Tajawal,sans-serif;font-size:.82rem;cursor:pointer;background:var(--surface);color:var(--green);font-weight:700">دخول</button>
@@ -1378,7 +1378,7 @@ function readStoredJSON(key, fallback) {
 <div id="nameScreen" style="position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100000">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.5rem 2rem;max-width:380px;width:90%;box-shadow:var(--shadow-md);text-align:center">
     <div style="font-size:2.5rem;margin-bottom:.75rem">👋</div>
-    <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.4rem;color:var(--ink);margin-bottom:.35rem">أهلاً بيك في منظّم!</div>
+    <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.4rem;color:var(--ink);margin-bottom:.35rem">أهلاً بيك في مُنَظَّمْ!</div>
     <div style="font-size:.85rem;color:var(--ink3);margin-bottom:1.25rem;line-height:1.6">اكتب اسمك أو لقبك عشان نحيّيك بيه. مش هننشره إلا لو اخترت المشاركة بنفسك.</div>
     <input id="nameInput" type="text" maxlength="25" placeholder="اكتب اسمك هنا (مثال: عمارة)..." onkeydown="if(event.key==='Enter')saveName()" style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-family:Tajawal,sans-serif;font-size:1rem;font-weight:600;background:var(--surface2);color:var(--ink);outline:none;text-align:center;margin-bottom:1rem;display:block">
     <button onclick="saveName()" style="width:100%;padding:.85rem;background:var(--green);color:white;border:none;border-radius:12px;font-family:Tajawal,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:var(--shadow)">حفظ والبدء 🚀</button>
@@ -1390,7 +1390,7 @@ function readStoredJSON(key, fallback) {
   <div class="sidebar-logo" style="display:flex;align-items:center;justify-content:space-between">
     <div style="display:flex;align-items:center;gap:.5rem">
       <span class="logo-dot"></span>
-      مذاكرتي
+      مُنَظَّمْ
     </div>
     <div style="display:flex;align-items:center;gap:.5rem">
       <span id="starsDisplay" style="font-size:.85rem;color:var(--amber);font-weight:700">⭐ 0</span>
@@ -1428,7 +1428,7 @@ function readStoredJSON(key, fallback) {
   <button class="nav-item" onclick="goPage('pdfs',this)">
     <span class="nav-icon">📚</span> مكتبة الكتب (PDF)
   </button>
-  <button class="nav-item" onclick="goPage('ai',this)"><span class="nav-icon">✦</span> مساعد منظّم</button>
+  <button class="nav-item" onclick="goPage('ai',this)"><span class="nav-icon">✦</span> مساعد مُنَظَّمْ</button>
   <button class="nav-item" onclick="goPage('grades',this)">
     <span class="nav-icon">🧮</span> حاسبة الدرجات
   </button>
@@ -1630,7 +1630,7 @@ function readStoredJSON(key, fallback) {
 @media(max-width:600px){.ai-messages{height:360px;padding:14px}.ai-bubble{max-width:94%}.ai-heading h2{font-size:1.35rem}.ai-compose{padding:10px;gap:7px}.ai-compose button{padding:0 12px}.ai-prompts{gap:6px}.ai-prompts button{font-size:.75rem}.ai-orb{width:48px;height:48px}.ai-foot{align-items:flex-start}}
 </style>
 <section class="page" id="page-ai"><div class="ai-shell">
-<div class="ai-heading"><div><div class="ai-kicker">مساحة للفهم والإنجاز</div><h2>مساعد منظّم</h2><p>سؤال صغير. خطوة أوضح. مذاكرة أهدى.</p></div><div class="ai-orb" aria-hidden="true">✦</div></div>
+<div class="ai-heading"><div><div class="ai-kicker">مساحة للفهم والإنجاز</div><h2>مساعد مُنَظَّمْ</h2><p>سؤال صغير. خطوة أوضح. مذاكرة أهدى.</p></div><div class="ai-orb" aria-hidden="true">✦</div></div>
 <div class="ai-prompts"><button type="button" data-ai-prompt="اشرحلي درس صعب بطريقة بسيطة، وابدأ بسؤالي عن الموضوع">افهم درس</button><button type="button" data-ai-prompt="ساعدني أعمل خطة مذاكرة واقعية، اسألني عن المواد والوقت المتاح">رتّب يومي</button><button type="button" data-ai-prompt="اعمللي أسئلة مراجعة، اسألني الأول عن المادة والدرس">اختبر فهمي</button><button type="button" data-ai-prompt="ساعدني أحسن كتابة فقرة، هبعتلك النص">حسّن كتابتي</button></div>
 <div class="ai-chat"><div class="ai-messages" id="aiMessages" role="log" aria-label="المحادثة" aria-live="polite"></div><form id="aiForm" class="ai-compose"><textarea id="aiInput" maxlength="2000" rows="2" aria-label="رسالتك للمساعد" placeholder="اسأل براحتك... إيه اللي محتاج تفهمه؟"></textarea><button type="submit" id="aiSend" class="btn-primary">إرسال ↑</button></form></div>
 <div class="ai-foot"><span id="aiStatus" role="status">12 طلب يومياً للحساب، حسب الحصة المشتركة.</span><button class="btn-sm" id="aiNew" type="button">محادثة جديدة</button></div>
@@ -4655,7 +4655,7 @@ function showFab() {
 
 <!-- MOBILE HEADER -->
 <div class="mob-header" id="mobHeader">
-  <div class="mob-header-logo">🗂️ منظّم</div>
+  <div class="mob-header-logo">🗂️ مُنَظَّمْ</div>
   <div class="mob-header-actions">
     <span id="mobStars" style="font-size:.8rem;color:var(--amber);font-weight:700">⭐ 0</span>
     <button class="mob-header-btn" onclick="toggleDark()" id="mobDarkBtn">🌙</button>
@@ -4710,7 +4710,7 @@ function showFab() {
       <span style="font-size:1.6rem">📝</span>
       <span style="font-size:.75rem;color:var(--ink2);font-weight:600">الملاحظات</span>
     </button>
-<button onclick="mobGoNav('ai',null);closeMobDrawer()" style="display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:.9rem .5rem;background:var(--surface2);border:1px solid var(--border);border-radius:14px;cursor:pointer;font-family:Tajawal,sans-serif"><span style="font-size:1.5rem;color:var(--green)">✦</span><span style="font-size:.75rem;color:var(--ink);font-weight:700">مساعد منظّم</span></button>
+<button onclick="mobGoNav('ai',null);closeMobDrawer()" style="display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:.9rem .5rem;background:var(--surface2);border:1px solid var(--border);border-radius:14px;cursor:pointer;font-family:Tajawal,sans-serif"><span style="font-size:1.5rem;color:var(--green)">✦</span><span style="font-size:.75rem;color:var(--ink);font-weight:700">مساعد مُنَظَّمْ</span></button>
     <button onclick="mobGoNav('pdfs',null);closeMobDrawer()" style="display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:.9rem .5rem;background:var(--surface2);border:1px solid var(--border);border-radius:14px;cursor:pointer;font-family:Tajawal,sans-serif">
       <span style="font-size:1.6rem">📚</span>
       <span style="font-size:.75rem;color:var(--ink2);font-weight:600">مكتبة PDF</span>
@@ -5372,7 +5372,7 @@ async function publishMyDeckToCommunity() {
     await window._db.collection('communityDecks').add({
       title: title,
       cards: cleanCards,
-      authorName: localStorage.getItem('userName') || 'طالب في منظّم',
+      authorName: localStorage.getItem('userName') || 'طالب في مُنَظَّمْ',
       createdAt: new Date().toISOString()
     });
     if(titleEl) titleEl.value = '';
@@ -5506,7 +5506,7 @@ async function submitDeckComment(deckId) {
   const inp = document.getElementById('deck-comment-inp-' + deckId);
   const text = inp ? inp.value.trim() : '';
   if(!text) return showToast('اكتب تعليقك الأول ✍️');
-  const author = localStorage.getItem('userName') || 'طالب في منظّم';
+  const author = localStorage.getItem('userName') || 'طالب في مُنَظَّمْ';
   try {
     const ref = window._db.collection('communityDecks').doc(deckId);
     const snap = await ref.get();
@@ -5974,7 +5974,7 @@ async function publishCommunityNote() {
       title,
       subject,
       content,
-      authorName: localStorage.getItem('userName') || 'طالب في منظّم',
+      authorName: localStorage.getItem('userName') || 'طالب في مُنَظَّمْ',
       likes: 0,
       createdAt: new Date().toISOString()
     });
@@ -6000,7 +6000,7 @@ async function shareQuickNoteToCommunity(noteId) {
       title: n.title,
       subject: n.subject || 'عام',
       content: n.content,
-      authorName: localStorage.getItem('userName') || 'طالب في منظّم',
+      authorName: localStorage.getItem('userName') || 'طالب في مُنَظَّمْ',
       likes: 0,
       createdAt: new Date().toISOString()
     });
@@ -6191,7 +6191,7 @@ function createStudyRoom() {
   if(!roomName || !roomName.trim()) return;
   const roomGoal = prompt("إيه المادة أو الهدف في الغرفة دي؟ (مثال: حل 50 سؤال كيمياء):", "مذاكرة مركزة 🔥") || "مذاكرة مركزة 🔥";
   const myUid = getMyRoomUid();
-  const myName = localStorage.getItem('userName') || 'طالب في منظّم';
+  const myName = localStorage.getItem('userName') || 'طالب في مُنَظَّمْ';
 
   const participants = {};
   participants[myUid] = {
@@ -6208,7 +6208,7 @@ function createStudyRoom() {
     hostName: myName,
     hostUid: myUid,
     participants: participants,
-    messages: [{ author: '🤖 منظّم', text: `أهلاً بكم في غرفة "${roomName.trim()}"! ذاكروا 10 دقائق على الأقل واضغطوا "خلصت مذاكرة" لاستلام النجوم ⭐`, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) }],
+    messages: [{ author: '🤖 مُنَظَّمْ', text: `أهلاً بكم في غرفة "${roomName.trim()}"! ذاكروا 10 دقائق على الأقل واضغطوا "خلصت مذاكرة" لاستلام النجوم ⭐`, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) }],
     createdAt: new Date().toISOString()
   }).then((docRef) => {
     showToast("✅ تم إنشاء الغرفة! جاري دخولك الآن...");
@@ -6437,7 +6437,7 @@ async function finishRoomStudySession() {
       }
       const messages = Array.isArray(data.messages) ? [...data.messages] : [];
       messages.push({
-        author: '🏆 منظّم',
+        author: '🏆 مُنَظَّمْ',
         text: `البطل ${myName} خلص ${studiedMins} دقيقة مذاكرة في الغرفة وكسب +15 ⭐!`,
         time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
       });
@@ -6977,7 +6977,7 @@ window.syncLeaderboard=async()=>{};
 let history=[],busy=false,uid=null,generation=0;
 const el=id=>document.getElementById(id);
 function add(role,text){const row=document.createElement('div');row.className='ai-bubble '+role;row.textContent=text;el('aiMessages').append(row);row.scrollIntoView({block:'nearest'});return row;}
-function reset(){generation++;history=[];el('aiMessages').replaceChildren();add('assistant','أهلاً بيك 👋\nأنا مساعدك في منظّم. اسألني في شرح درس، مراجعة، تنظيم وقتك، الكتابة أو أي سؤال يساعدك كطالب.');}
+function reset(){generation++;history=[];el('aiMessages').replaceChildren();add('assistant','أهلاً بيك 👋\nأنا مساعدك في مُنَظَّمْ. اسألني في شرح درس، مراجعة، تنظيم وقتك، الكتابة أو أي سؤال يساعدك كطالب.');}
 async function send(text){
  if(busy)return;const input=el('aiInput');text=(text||input.value).trim();if(!text)return;
  if(text.length>2000){el('aiStatus').textContent='اختصر رسالتك لحد 2000 حرف.';return;}
